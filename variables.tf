@@ -4,7 +4,6 @@ variable "hcloud_token" {
 }
 
 variable "discord_client_id" {
-  sensitive   = true
   description = "Discord OAuth2 client ID."
 }
 
@@ -16,4 +15,8 @@ variable "discord_client_secret" {
 variable "mogboard_pubkey" {
   sensitive   = true
   description = "The public key to use to authenticate to Mogboard servers."
+}
+
+variable "allowed_ips" {
+  description = "The IPs that are allowed to connect to the servers over SSH."
 }
