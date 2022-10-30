@@ -178,13 +178,7 @@ resource "hcloud_load_balancer" "lb" {
 resource "hcloud_load_balancer_target" "lb_target_1" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb.id
-  server_id        = hcloud_server.swarm_worker_1.id
-}
-
-resource "hcloud_load_balancer_target" "lb_target_2" {
-  type             = "server"
-  load_balancer_id = hcloud_load_balancer.lb.id
-  server_id        = hcloud_server.swarm_worker_2.id
+  server_id        = hcloud_server.swarm_manager_1.id
 }
 
 resource "hcloud_load_balancer_network" "lb_network" {
