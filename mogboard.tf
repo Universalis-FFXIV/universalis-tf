@@ -77,7 +77,7 @@ output "mogboard_public_ip" {
 
 resource "hcloud_volume" "mogboard_db_volume" {
   name     = "mogboard-db"
-  size     = 50
+  size     = 20
   format   = "ext4"
   location = "hel1"
 }
