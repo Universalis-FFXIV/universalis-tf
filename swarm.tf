@@ -32,36 +32,22 @@ resource "hcloud_firewall" "swarm_firewall" {
     direction  = "in"
     protocol   = "tcp"
     port       = "22"
-    source_ips = [var.local_ip, "10.0.1.0/24"]
+    source_ips = [var.local_ip]
   }
 
   // Docker Swarm
   rule {
     direction  = "in"
     protocol   = "tcp"
-    port       = "2377"
-    source_ips = ["10.0.1.0/24"]
-  }
-
-  rule {
-    direction  = "in"
-    protocol   = "tcp"
-    port       = "7946"
-    source_ips = ["10.0.1.0/24"]
+    port       = "any"
+    source_ips = ["10.0.0.0/16"]
   }
 
   rule {
     direction  = "in"
     protocol   = "udp"
-    port       = "7946"
-    source_ips = ["10.0.1.0/24"]
-  }
-
-  rule {
-    direction  = "in"
-    protocol   = "udp"
-    port       = "4789"
-    source_ips = ["10.0.1.0/24"]
+    port       = "any"
+    source_ips = ["10.0.0.0/16"]
   }
 
   // HTTP

@@ -1,0 +1,137 @@
+version: "3.3"
+services:
+  nginx:
+    image: karashiiro/universalis-nginx:latest
+    depends_on:
+      - universalis
+      - mariadb
+    networks:
+      - "net"
+      - "traefik-public"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "512M"
+        reservations:
+          cpus: "0.10"
+          memory: "256M"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.universalis-http.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.universalis-http.entrypoints=http
+        - traefik.http.routers.universalis-http.middlewares=https-redirect
+        - traefik.http.routers.universalis-https.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.universalis-https.entrypoints=https
+        - traefik.http.routers.universalis-https.tls=true
+        - traefik.http.routers.universalis-https.tls.certresolver=le
+        - traefik.http.services.universalis.loadbalancer.server.port=80
+  mogboard:
+    image: "ghcr.io/universalis-ffxiv/mogboard-next:latest"
+    environment:
+      APP_ENV: "prod"
+      NEXTAUTH_URL: "https://universalis.app"
+
+      DATABASE_HOST: "mariadb"
+      DATABASE_PORT: "3306"
+      DATABASE_USER: "dalamud"
+      DATABASE_PASS: "dalamud"
+      DATABASE_NAME: "dalamud"
+      DATABASE_CONNECTIONS: "4"
+
+      LODESTONE_API: "https://lodestone.universalis.app"
+
+      DISCORD_CLIENT_ID: "${MOGBOARD_DISCORD_ID}"
+      DISCORD_CLIENT_SECRET: "${MOGBOARD_DISCORD_SECRET}"
+      NEXTAUTH_SECRET: "${MOGBOARD_SECRET}"
+    networks:
+      - "net"
+      - "traefik-public"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "1024M"
+        reservations:
+          cpus: "0.25"
+          memory: "512M"
+  mariadb:
+    image: "mariadb:10.3.32"
+    environment:
+      MYSQL_ROOT_PASSWORD: "dalamud"
+      MYSQL_DATABASE: "dalamud"
+      MYSQL_USER: "dalamud"
+      MYSQL_PASSWORD: "dalamud"
+    volumes:
+      - "web-db-data:/var/lib/mysql"
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: "512M"
+        reservations:
+          cpus: "0.15"
+          memory: "256M"
+      placement:
+        constraints:
+          - "node.labels.mogboard.db-data == true"
+  universalis:
+    image: ghcr.io/universalis-ffxiv/universalis:latest
+    environment:
+      ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=190;Max Auto Prepare=30"
+    volumes:
+      - "sqpack:/sqpack"
+    depends_on:
+      - postgres
+    networks:
+      - "net"
+      - "traefik-public"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "1024M"
+        reservations:
+          cpus: "0.25"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.universalis.sqpack == true"
+  postgres:
+    image: postgres:14.3
+    environment:
+      POSTGRES_USER: universalis
+      POSTGRES_PASSWORD: universalis
+    volumes:
+      - "db-data:/var/lib/postgres/data"
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: "512M"
+        reservations:
+          cpus: "0.15"
+          memory: "256M"
+      placement:
+        constraints:
+          - "node.labels.universalis.db-data == true"
+networks:
+  net:
+    driver: "overlay"
+    attachable: true
+  traefik-public:
+    external: true
+volumes:
+  web-db-data:
+    driver: "local"
+  db-data:
+    driver: "local"
+  sqpack:
+    driver: "local"
