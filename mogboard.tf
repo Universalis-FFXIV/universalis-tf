@@ -25,6 +25,7 @@ resource "hcloud_firewall" "mogboard_firewall" {
   }
 
   // SSH
+  // TODO: Lock this down
   rule {
     direction = "in"
     protocol  = "tcp"
