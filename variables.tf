@@ -17,6 +17,6 @@ variable "mogboard_pubkey" {
   description = "The public key to use to authenticate to Mogboard servers."
 }
 
-variable "allowed_ips" {
-  description = "The IPs that are allowed to connect to the servers over SSH."
+variable "local_ip" {
+  description = "Your local IP, to connect to the servers over SSH."
 }

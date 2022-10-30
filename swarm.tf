@@ -27,12 +27,41 @@ resource "hcloud_firewall" "swarm_firewall" {
   }
 
   // SSH
-  // TODO: Use bastion instead
+  // TODO: Use bastion instead for local
   rule {
     direction  = "in"
     protocol   = "tcp"
     port       = "22"
-    source_ips = var.allowed_ips
+    source_ips = [var.local_ip, "10.0.1.0/24"]
+  }
+
+  // Docker Swarm
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "2377"
+    source_ips = ["10.0.1.0/24"]
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "7946"
+    source_ips = ["10.0.1.0/24"]
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "udp"
+    port       = "7946"
+    source_ips = ["10.0.1.0/24"]
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "udp"
+    port       = "4789"
+    source_ips = ["10.0.1.0/24"]
   }
 
   // HTTP
@@ -66,8 +95,8 @@ resource "hcloud_ssh_key" "swarm_ssh" {
 }
 
 # Provision the manager node
-resource "hcloud_server" "swarm_manager" {
-  name        = "swarm-manager"
+resource "hcloud_server" "swarm_manager_1" {
+  name        = "swarm-manager-1"
   server_type = "cx11"
   image       = "docker-ce"
   location    = "hel1"
@@ -84,8 +113,8 @@ resource "hcloud_server" "swarm_manager" {
   ]
 }
 
-output "swarm_manager_ip" {
-  value = hcloud_server.swarm_manager.ipv4_address
+output "swarm_manager_1_ip" {
+  value = hcloud_server.swarm_manager_1.ipv4_address
 }
 
 # Provision worker nodes
@@ -136,7 +165,7 @@ output "swarm_worker_2_ip" {
 # Add servers to the firewall
 resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
   firewall_id = hcloud_firewall.swarm_firewall.id
-  server_ids  = [hcloud_server.swarm_worker_1.id, hcloud_server.swarm_worker_2.id]
+  server_ids  = [hcloud_server.swarm_manager_1.id, hcloud_server.swarm_worker_1.id, hcloud_server.swarm_worker_2.id]
 }
 
 # Load balancer
