@@ -167,27 +167,3 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
   firewall_id = hcloud_firewall.swarm_firewall.id
   server_ids  = [hcloud_server.swarm_manager_1.id, hcloud_server.swarm_worker_1.id, hcloud_server.swarm_worker_2.id]
 }
-
-# Load balancer
-resource "hcloud_load_balancer" "lb" {
-  name               = "swarm-load-balancer"
-  load_balancer_type = "lb11"
-  location           = "hel1"
-}
-
-resource "hcloud_load_balancer_target" "lb_target_1" {
-  type             = "server"
-  load_balancer_id = hcloud_load_balancer.lb.id
-  server_id        = hcloud_server.swarm_manager_1.id
-}
-
-resource "hcloud_load_balancer_network" "lb_network" {
-  load_balancer_id = hcloud_load_balancer.lb.id
-  network_id       = hcloud_network.network.id
-  ip               = "10.0.1.70"
-}
-
-output "load_balancer_ip" {
-  value       = hcloud_load_balancer.lb.ipv4
-  description = "LoadBalancer IP"
-}
