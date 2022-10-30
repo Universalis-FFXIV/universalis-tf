@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  mogboard:
+    image: "ghcr.io/universalis-ffxiv/mogboard-next:latest"
+    restart: "always"
+    environment:
+      APP_ENV: "prod"
+      NEXTAUTH_URL: "https://universalis.app"
+
+      DATABASE_HOST: "mariadb"
+      DATABASE_PORT: "3306"
+      DATABASE_USER: "dalamud"
+      DATABASE_PASS: "dalamud"
+      DATABASE_NAME: "dalamud"
+      DATABASE_CONNECTIONS: "4"
+
+      LODESTONE_API: "https://lodestone.universalis.app"
+
+      DISCORD_CLIENT_ID: "${discord_client_id}"
+      DISCORD_CLIENT_SECRET: "${discord_client_secret}"
+      NEXTAUTH_SECRET: "${nextauth_secret}"
+    depends_on:
+      - "mariadb"
+    ports:
+      - "80:3000" # TODO: Add NGINX and automatically provision a certificate using certbot
+  mariadb:
+    image: "mariadb:10.3.32"
+    restart: "always"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${db_secret}"
+      MYSQL_DATABASE: "dalamud"
+      MYSQL_USER: "dalamud"
+      MYSQL_PASSWORD: "dalamud"
+    volumes:
+      - "/mnt/mogboard-db/mariadb:/var/lib/mysql:rw"
+      - "/mnt/mogboard-db/mariadb-dump:/dump:rw"
+      - "/mnt/mogboard-db/mariadb-import:/import:ro"
+      - "/app/sqlinit:/docker-entrypoint-initdb.d:ro"
+    ports:
+      - "3306:3306"
