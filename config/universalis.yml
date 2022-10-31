@@ -65,14 +65,12 @@ services:
         constraints:
           - "node.labels.mogboard.db-data == true"
   universalis:
-    image: ghcr.io/universalis-ffxiv/universalis:latest
+    image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=190;Max Auto Prepare=30"
-    volumes:
-      - "sqpack:/sqpack"
     depends_on:
-      - postgres
+      - "postgres"
     networks:
       - "net"
     deploy:
@@ -83,9 +81,6 @@ services:
         reservations:
           cpus: "0.5"
           memory: "512M"
-      placement:
-        constraints:
-          - "node.labels.universalis.sqpack == true"
   postgres:
     image: postgres:14.3
     environment:
@@ -115,6 +110,3 @@ networks:
       com.docker.network.driver.mtu: 1450
   traefik-public:
     external: true
-volumes:
-  sqpack:
-    driver: "local"
