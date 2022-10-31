@@ -80,7 +80,7 @@ resource "hcloud_ssh_key" "swarm_ssh" {
   public_key = var.mogboard_pubkey
 }
 
-# Provision the manager node
+# Provision the manager nodes
 resource "hcloud_server" "swarm_manager_1" {
   name               = "swarm-manager-1"
   server_type        = "cx11"
@@ -101,13 +101,8 @@ resource "hcloud_server" "swarm_manager_1" {
   ]
 }
 
-output "swarm_manager_1_ip" {
-  value = hcloud_server.swarm_manager_1.ipv4_address
-}
-
-# Provision worker nodes
-resource "hcloud_server" "swarm_worker_1" {
-  name               = "swarm-worker-1"
+resource "hcloud_server" "swarm_manager_2" {
+  name               = "swarm-manager-2"
   server_type        = "cx11"
   image              = "docker-ce"
   location           = "hel1"
@@ -118,7 +113,6 @@ resource "hcloud_server" "swarm_worker_1" {
 
   network {
     network_id = hcloud_network.network.id
-    ip         = "10.0.1.2"
   }
 
   depends_on = [
@@ -126,6 +120,60 @@ resource "hcloud_server" "swarm_worker_1" {
   ]
 }
 
+resource "hcloud_server" "swarm_manager_3" {
+  name               = "swarm-manager-3"
+  server_type        = "cx11"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+output "swarm_manager_1_ip" {
+  value = hcloud_server.swarm_manager_1.ipv4_address
+}
+
+output "swarm_manager_2_ip" {
+  value = hcloud_server.swarm_manager_2.ipv4_address
+}
+
+output "swarm_manager_3_ip" {
+  value = hcloud_server.swarm_manager_3.ipv4_address
+}
+
+# Provision worker nodes
+
+# MariaDB is assigned to this node
+resource "hcloud_server" "swarm_worker_1" {
+  name               = "swarm-worker-1"
+  server_type        = "cx21"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+# Postgres is assigned to this node
 resource "hcloud_server" "swarm_worker_2" {
   name               = "swarm-worker-2"
   server_type        = "cx31"
@@ -138,7 +186,25 @@ resource "hcloud_server" "swarm_worker_2" {
 
   network {
     network_id = hcloud_network.network.id
-    ip         = "10.0.1.3"
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+resource "hcloud_server" "swarm_worker_3" {
+  name               = "swarm-worker-3"
+  server_type        = "cx11"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
   }
 
   depends_on = [
@@ -152,6 +218,10 @@ output "swarm_worker_1_ip" {
 
 output "swarm_worker_2_ip" {
   value = hcloud_server.swarm_worker_2.ipv4_address
+}
+
+output "swarm_worker_3_ip" {
+  value = hcloud_server.swarm_worker_3.ipv4_address
 }
 
 # Volumes for the website and API databases
@@ -186,5 +256,12 @@ resource "hcloud_volume_attachment" "api_db_ref" {
 # Add servers to the firewall
 resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
   firewall_id = hcloud_firewall.swarm_firewall.id
-  server_ids  = [hcloud_server.swarm_manager_1.id, hcloud_server.swarm_worker_1.id, hcloud_server.swarm_worker_2.id]
+  server_ids = [
+    hcloud_server.swarm_manager_1.id,
+    hcloud_server.swarm_manager_2.id,
+    hcloud_server.swarm_manager_3.id,
+    hcloud_server.swarm_worker_1.id,
+    hcloud_server.swarm_worker_2.id,
+    hcloud_server.swarm_worker_3.id
+  ]
 }
