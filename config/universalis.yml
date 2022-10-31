@@ -1,21 +1,22 @@
 version: "3.3"
 services:
   nginx:
-    image: karashiiro/universalis-nginx:latest
+    image: "karashiiro/universalis-nginx:latest"
     depends_on:
-      - universalis
-      - mariadb
+      - "universalis"
+      - "mariadb"
     networks:
       - "net"
       - "traefik-public"
     deploy:
+      replicas: 3
       resources:
         limits:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.20"
+          memory: "256M"
         reservations:
           cpus: "0.10"
-          memory: "256M"
+          memory: "128M"
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -35,6 +36,7 @@ services:
     networks:
       - "net"
     deploy:
+      replicas: 3
       resources:
         limits:
           cpus: "0.50"
@@ -56,11 +58,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
-          memory: "512M"
+          cpus: "0.50"
+          memory: "1024M"
         reservations:
-          cpus: "0.15"
-          memory: "256M"
+          cpus: "0.25"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.mogboard.db-data == true"
@@ -68,24 +70,25 @@ services:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=190;Max Auto Prepare=30"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=20;Max Auto Prepare=30"
     depends_on:
       - "postgres"
     networks:
       - "net"
     deploy:
+      replicas: 3
       resources:
         limits:
-          cpus: "1.00"
-          memory: "2048M"
+          cpus: "1.50"
+          memory: "1024M"
         reservations:
-          cpus: "0.5"
+          cpus: "1.00"
           memory: "512M"
   postgres:
-    image: postgres:14.3
+    image: "postgres:14.3"
     environment:
-      POSTGRES_USER: universalis
-      POSTGRES_PASSWORD: universalis
+      POSTGRES_USER: "universalis"
+      POSTGRES_PASSWORD: "universalis"
     volumes:
       - "/mnt/api-db/data:/var/lib/postgres/data"
     networks:
@@ -93,11 +96,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
-          memory: "512M"
+          cpus: "1.50"
+          memory: "4096M"
         reservations:
-          cpus: "0.15"
-          memory: "256M"
+          cpus: "1.00"
+          memory: "1024M"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
