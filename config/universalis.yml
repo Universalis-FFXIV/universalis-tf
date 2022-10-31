@@ -20,33 +20,18 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.universalis-http.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.universalis-http.rule=Host(`mogboard.universalis.app`)
         - traefik.http.routers.universalis-http.entrypoints=http
         - traefik.http.routers.universalis-http.middlewares=https-redirect
-        - traefik.http.routers.universalis-https.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.universalis-https.rule=Host(`mogboard.universalis.app`)
         - traefik.http.routers.universalis-https.entrypoints=https
         - traefik.http.routers.universalis-https.tls=true
         - traefik.http.routers.universalis-https.tls.certresolver=le
         - traefik.http.services.universalis.loadbalancer.server.port=80
   mogboard:
     image: "ghcr.io/universalis-ffxiv/mogboard-next:latest"
-    environment:
-      APP_ENV: "prod"
-      NEXTAUTH_URL: "https://mogboard.universalis.app"
-      NEXT_PUBLIC_API_URL: "https://mogboard.universalis.app/api"
-
-      DATABASE_HOST: "mariadb"
-      DATABASE_PORT: "3306"
-      DATABASE_USER: "dalamud"
-      DATABASE_PASS: "dalamud"
-      DATABASE_NAME: "dalamud"
-      DATABASE_CONNECTIONS: "4"
-
-      LODESTONE_API: "https://lodestone.universalis.app"
-
-      DISCORD_CLIENT_ID: "${MOGBOARD_DISCORD_ID}"
-      DISCORD_CLIENT_SECRET: "${MOGBOARD_DISCORD_SECRET}"
-      NEXTAUTH_SECRET: "${MOGBOARD_SECRET}"
+    env_file:
+      - "/universalis/mogboard.env"
     networks:
       - "net"
     deploy:
