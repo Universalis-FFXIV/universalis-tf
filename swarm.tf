@@ -82,12 +82,14 @@ resource "hcloud_ssh_key" "swarm_ssh" {
 
 # Provision the manager node
 resource "hcloud_server" "swarm_manager_1" {
-  name        = "swarm-manager-1"
-  server_type = "cx11"
-  image       = "docker-ce"
-  location    = "hel1"
-  keep_disk   = true
-  ssh_keys    = [hcloud_ssh_key.swarm_ssh.id]
+  name               = "swarm-manager-1"
+  server_type        = "cx11"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
 
   network {
     network_id = hcloud_network.network.id
@@ -105,12 +107,14 @@ output "swarm_manager_1_ip" {
 
 # Provision worker nodes
 resource "hcloud_server" "swarm_worker_1" {
-  name        = "swarm-worker-1"
-  server_type = "cx11"
-  image       = "docker-ce"
-  location    = "hel1"
-  keep_disk   = true
-  ssh_keys    = [hcloud_ssh_key.swarm_ssh.id]
+  name               = "swarm-worker-1"
+  server_type        = "cx11"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
 
   network {
     network_id = hcloud_network.network.id
@@ -123,12 +127,14 @@ resource "hcloud_server" "swarm_worker_1" {
 }
 
 resource "hcloud_server" "swarm_worker_2" {
-  name        = "swarm-worker-2"
-  server_type = "cx21"
-  image       = "docker-ce"
-  location    = "hel1"
-  keep_disk   = true
-  ssh_keys    = [hcloud_ssh_key.swarm_ssh.id]
+  name               = "swarm-worker-2"
+  server_type        = "cx21"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
 
   network {
     network_id = hcloud_network.network.id
@@ -146,6 +152,35 @@ output "swarm_worker_1_ip" {
 
 output "swarm_worker_2_ip" {
   value = hcloud_server.swarm_worker_2.ipv4_address
+}
+
+# Volumes for the website and API databases
+resource "hcloud_volume" "website_db" {
+  name              = "website-db"
+  location          = "hel1"
+  size              = 10
+  format            = "ext4"
+  delete_protection = true
+}
+
+resource "hcloud_volume" "api_db" {
+  name              = "api-db"
+  location          = "hel1"
+  size              = 20
+  format            = "ext4"
+  delete_protection = true
+}
+
+resource "hcloud_volume_attachment" "website_db_ref" {
+  volume_id = hcloud_volume.website_db.id
+  server_id = hcloud_server.swarm_worker_1.id
+  automount = true
+}
+
+resource "hcloud_volume_attachment" "api_db_ref" {
+  volume_id = hcloud_volume.api_db.id
+  server_id = hcloud_server.swarm_worker_2.id
+  automount = true
 }
 
 # Add servers to the firewall

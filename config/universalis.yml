@@ -65,7 +65,7 @@ services:
       MYSQL_USER: "dalamud"
       MYSQL_PASSWORD: "dalamud"
     volumes:
-      - "web-db-data:/var/lib/mysql"
+      - "/mnt/website-db/mysql:/var/lib/mysql"
     networks:
       - "net"
     deploy:
@@ -107,7 +107,7 @@ services:
       POSTGRES_USER: universalis
       POSTGRES_PASSWORD: universalis
     volumes:
-      - "db-data:/var/lib/postgres/data"
+      - "/mnt/api-db/data:/var/lib/postgres/data"
     networks:
       - "net"
     deploy:
@@ -131,9 +131,5 @@ networks:
   traefik-public:
     external: true
 volumes:
-  web-db-data:
-    driver: "local"
-  db-data:
-    driver: "local"
   sqpack:
     driver: "local"
