@@ -124,7 +124,7 @@ resource "hcloud_server" "swarm_worker_1" {
 
 resource "hcloud_server" "swarm_worker_2" {
   name        = "swarm-worker-2"
-  server_type = "cx11"
+  server_type = "cx21"
   image       = "docker-ce"
   location    = "hel1"
   keep_disk   = true
