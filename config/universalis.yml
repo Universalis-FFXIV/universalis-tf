@@ -33,7 +33,7 @@ services:
     environment:
       APP_ENV: "prod"
       NEXTAUTH_URL: "https://mogboard.universalis.app"
-      API_URL: "https://mogboard.universalis.app/api"
+      NEXT_PUBLIC_API_URL: "https://mogboard.universalis.app/api"
 
       DATABASE_HOST: "mariadb"
       DATABASE_PORT: "3306"
