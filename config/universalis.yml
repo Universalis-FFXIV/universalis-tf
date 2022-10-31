@@ -32,7 +32,8 @@ services:
     image: "ghcr.io/universalis-ffxiv/mogboard-next:latest"
     environment:
       APP_ENV: "prod"
-      NEXTAUTH_URL: "https://universalis.app"
+      NEXTAUTH_URL: "https://mogboard.universalis.app"
+      API_URL: "https://mogboard.universalis.app/api"
 
       DATABASE_HOST: "mariadb"
       DATABASE_PORT: "3306"
@@ -48,7 +49,6 @@ services:
       NEXTAUTH_SECRET: "${MOGBOARD_SECRET}"
     networks:
       - "net"
-      - "traefik-public"
     deploy:
       resources:
         limits:
@@ -90,14 +90,13 @@ services:
       - postgres
     networks:
       - "net"
-      - "traefik-public"
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1024M"
+          cpus: "1.00"
+          memory: "2048M"
         reservations:
-          cpus: "0.25"
+          cpus: "0.5"
           memory: "512M"
       placement:
         constraints:
@@ -126,6 +125,9 @@ networks:
   net:
     driver: "overlay"
     attachable: true
+    driver_opts:
+      # Hetzner networks have an MTU of 1450
+      com.docker.network.driver.mtu: 1450
   traefik-public:
     external: true
 volumes:

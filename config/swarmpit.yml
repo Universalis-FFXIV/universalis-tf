@@ -91,6 +91,9 @@ networks:
   net:
     driver: overlay
     attachable: true
+    driver_opts:
+      # Hetzner networks have an MTU of 1450
+      com.docker.network.driver.mtu: 1450
   traefik-public:
     external: true
 
