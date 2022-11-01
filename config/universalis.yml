@@ -84,6 +84,9 @@ services:
         reservations:
           cpus: "1.00"
           memory: "1024M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical == false"
   postgres:
     image: "postgres:14.3"
     environment:
