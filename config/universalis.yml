@@ -21,10 +21,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.universalis-http.rule=Host(`mogboard.universalis.app`)
+        - traefik.http.routers.universalis-http.rule=Host(`universalis.app`)
         - traefik.http.routers.universalis-http.entrypoints=http
         - traefik.http.routers.universalis-http.middlewares=https-redirect
-        - traefik.http.routers.universalis-https.rule=Host(`mogboard.universalis.app`)
+        - traefik.http.routers.universalis-https.rule=Host(`universalis.app`)
         - traefik.http.routers.universalis-https.entrypoints=https
         - traefik.http.routers.universalis-https.tls=true
         - traefik.http.routers.universalis-https.tls.certresolver=le
@@ -80,10 +80,10 @@ services:
       resources:
         limits:
           cpus: "1.50"
-          memory: "1024M"
+          memory: "2048M"
         reservations:
           cpus: "1.00"
-          memory: "512M"
+          memory: "1024M"
   postgres:
     image: "postgres:14.3"
     environment:
