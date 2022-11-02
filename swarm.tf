@@ -258,6 +258,71 @@ resource "hcloud_volume_attachment" "api_db_ref" {
   automount = true
 }
 
+# Set up load balancer
+resource "hcloud_load_balancer" "lb_swarm" {
+  name               = "load-balancer"
+  load_balancer_type = "lb11"
+  location           = "hel1"
+  delete_protection  = true
+  algorithm {
+    type = "least_connections"
+  }
+}
+
+output "swarm_load_balancer_ip" {
+  value = hcloud_load_balancer.lb_swarm.ipv4
+}
+
+resource "hcloud_load_balancer_service" "lb_service_swarm_http" {
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  protocol         = "tcp"
+  listen_port      = 80
+  destination_port = 80
+}
+
+resource "hcloud_load_balancer_service" "lb_service_swarm_https" {
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  protocol         = "tcp"
+  listen_port      = 443
+  destination_port = 443
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_manager_1" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_manager_1.id
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_manager_2" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_manager_2.id
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_manager_3" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_manager_3.id
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_worker_1" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_worker_1.id
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_worker_2" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_worker_2.id
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_worker_3" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_worker_3.id
+}
+
 # Add servers to the firewall
 resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
   firewall_id = hcloud_firewall.swarm_firewall.id
