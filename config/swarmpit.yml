@@ -34,7 +34,6 @@ services:
         - traefik.http.routers.swarmpit-https.tls=true
         - traefik.http.routers.swarmpit-https.tls.certresolver=le
         - traefik.http.services.swarmpit.loadbalancer.server.port=8080
-
   db:
     image: couchdb:2.3.0
     volumes:
@@ -79,6 +78,8 @@ services:
       - net
     deploy:
       mode: global
+      labels:
+        swarmpit.agent: 'true'
       resources:
         limits:
           cpus: '0.10'
@@ -86,7 +87,6 @@ services:
         reservations:
           cpus: '0.05'
           memory: 32M
-
 networks:
   net:
     driver: overlay
@@ -96,7 +96,6 @@ networks:
       com.docker.network.driver.mtu: 1450
   traefik-public:
     external: true
-
 volumes:
   db-data:
     driver: local
