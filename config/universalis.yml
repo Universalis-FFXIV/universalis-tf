@@ -79,14 +79,14 @@ services:
       replicas: 3
       resources:
         limits:
-          cpus: "1.50"
-          memory: "2048M"
+          cpus: "1.70"
+          memory: "4096M"
         reservations:
           cpus: "1.00"
-          memory: "1024M"
+          memory: "2048M"
       placement:
         constraints:
-          - "node.labels.cluster.critical == false"
+          - "node.labels.cluster.critical != true"
   postgres:
     image: "postgres:14.3"
     environment:

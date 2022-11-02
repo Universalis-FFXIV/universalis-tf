@@ -113,6 +113,7 @@ resource "hcloud_server" "swarm_manager_2" {
 
   network {
     network_id = hcloud_network.network.id
+    ip         = "10.0.1.2"
   }
 
   depends_on = [
@@ -132,6 +133,7 @@ resource "hcloud_server" "swarm_manager_3" {
 
   network {
     network_id = hcloud_network.network.id
+    ip         = "10.0.1.3"
   }
 
   depends_on = [
@@ -166,6 +168,7 @@ resource "hcloud_server" "swarm_worker_1" {
 
   network {
     network_id = hcloud_network.network.id
+    ip         = "10.0.1.4"
   }
 
   depends_on = [
@@ -186,6 +189,7 @@ resource "hcloud_server" "swarm_worker_2" {
 
   network {
     network_id = hcloud_network.network.id
+    ip         = "10.0.1.5"
   }
 
   depends_on = [
@@ -205,6 +209,7 @@ resource "hcloud_server" "swarm_worker_3" {
 
   network {
     network_id = hcloud_network.network.id
+    ip         = "10.0.1.6"
   }
 
   depends_on = [
