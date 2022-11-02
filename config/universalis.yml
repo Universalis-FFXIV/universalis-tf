@@ -9,7 +9,7 @@ services:
       - "net"
       - "traefik-public"
     deploy:
-      replicas: 5
+      replicas: 7
       resources:
         limits:
           cpus: "0.20"
@@ -36,7 +36,7 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 3
+      replicas: 4
       resources:
         limits:
           cpus: "0.50"
