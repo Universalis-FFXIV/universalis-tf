@@ -93,7 +93,7 @@ services:
       POSTGRES_USER: "universalis"
       POSTGRES_PASSWORD: "universalis"
     volumes:
-      - "/mnt/api-db/data:/var/lib/postgres/data"
+      - "/mnt/api-db/data:/var/lib/postgresql/data"
     networks:
       - "net"
     deploy:
