@@ -217,6 +217,26 @@ resource "hcloud_server" "swarm_worker_3" {
   ]
 }
 
+resource "hcloud_server" "swarm_worker_4" {
+  name               = "swarm-worker-4"
+  server_type        = "cpx11"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.7"
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
 output "swarm_worker_1_ip" {
   value = hcloud_server.swarm_worker_1.ipv4_address
 }
@@ -227,6 +247,10 @@ output "swarm_worker_2_ip" {
 
 output "swarm_worker_3_ip" {
   value = hcloud_server.swarm_worker_3.ipv4_address
+}
+
+output "swarm_worker_4_ip" {
+  value = hcloud_server.swarm_worker_4.ipv4_address
 }
 
 # Volumes for the website and API databases
@@ -323,6 +347,12 @@ resource "hcloud_load_balancer_target" "lb_target_swarm_worker_3" {
   server_id        = hcloud_server.swarm_worker_3.id
 }
 
+resource "hcloud_load_balancer_target" "lb_target_swarm_worker_4" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_worker_4.id
+}
+
 # Add servers to the firewall
 resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
   firewall_id = hcloud_firewall.swarm_firewall.id
@@ -332,6 +362,7 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_manager_3.id,
     hcloud_server.swarm_worker_1.id,
     hcloud_server.swarm_worker_2.id,
-    hcloud_server.swarm_worker_3.id
+    hcloud_server.swarm_worker_3.id,
+    hcloud_server.swarm_worker_4.id
   ]
 }
