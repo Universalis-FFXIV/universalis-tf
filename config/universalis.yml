@@ -9,7 +9,7 @@ services:
       - "net"
       - "traefik-public"
     deploy:
-      replicas: 7
+      replicas: 3
       resources:
         limits:
           cpus: "0.20"
@@ -36,7 +36,7 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 4
+      replicas: 3
       resources:
         limits:
           cpus: "0.50"
@@ -71,8 +71,12 @@ services:
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=20;Max Auto Prepare=30"
+      UNIVERSALIS_MEMCACHED_CONNECTION: "memcached1,memcached2,memcached3"
     depends_on:
       - "postgres"
+      - "memcached1"
+      - "memcached2"
+      - "memcached3"
     networks:
       - "net"
     deploy:
@@ -84,6 +88,51 @@ services:
         reservations:
           cpus: "2.00"
           memory: "2048M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  memcached1:
+    image: memcached:1.6.17
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "128M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  memcached2:
+    image: memcached:1.6.17
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "128M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  memcached3:
+    image: memcached:1.6.17
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "128M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
