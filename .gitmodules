@@ -1,0 +1,3 @@
+[submodule "images/universalis-act-nginx/universalis_act_plugin"]
+	path = images/universalis-act-nginx/universalis_act_plugin
+	url = https://github.com/goaaats/universalis_act_plugin
