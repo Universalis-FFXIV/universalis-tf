@@ -12,11 +12,11 @@ services:
       replicas: 5
       resources:
         limits:
-          cpus: "0.20"
-          memory: "256M"
-        reservations:
-          cpus: "0.10"
+          cpus: "0.30"
           memory: "128M"
+        reservations:
+          cpus: "0.20"
+          memory: "64M"
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
