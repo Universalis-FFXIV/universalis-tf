@@ -41,6 +41,11 @@ with Diagram("Universalis", show=False):
             urlretrieve(swarmpit_url, swarmpit_icon)
             swarmpit = Custom("Swarmpit", swarmpit_icon)
 
+            swarm_cronjob_url = "https://crazymax.dev/swarm-cronjob/assets/logo.png"
+            swarm_cronjob_icon = "resources/swarm-cronjob.png"
+            urlretrieve(swarm_cronjob_url, swarm_cronjob_icon)
+            swarm_cronjob = Custom("swarm-cronjob", swarm_cronjob_icon)
+
             ca = LetsEncrypt("CA")
 
             ingress >> ca  # type: ignore
