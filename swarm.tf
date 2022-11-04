@@ -179,7 +179,7 @@ resource "hcloud_server" "swarm_worker_1" {
 # Postgres is assigned to this node
 resource "hcloud_server" "swarm_worker_2" {
   name               = "swarm-worker-2"
-  server_type        = "cx31"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
