@@ -100,11 +100,11 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "1.00"
-          memory: "3096M"
+          cpus: "0.50"
+          memory: "1024M"
         reservations:
-          cpus: "0.70"
-          memory: "2048M"
+          cpus: "0.30"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
