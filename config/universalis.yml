@@ -73,6 +73,7 @@ services:
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=20;Max Auto Prepare=30"
       UNIVERSALIS_MEMCACHED_CONNECTION: "memcached1,memcached2,memcached3"
     depends_on:
+      - "rabbitmq"
       - "postgres"
       - "memcached1"
       - "memcached2"
@@ -91,6 +92,19 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
+  rabbitmq:
+    image: "masstransit/rabbitmq:3.9.15"
+    networks:
+      - "net"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.70"
+          memory: "2048M"
+        reservations:
+          cpus: "0.50"
+          memory: "1024M"
   memcached1:
     image: memcached:1.6.17
     networks:
