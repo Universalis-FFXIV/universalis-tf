@@ -100,11 +100,14 @@ services:
       replicas: 1
       resources:
         limits:
+          cpus: "1.00"
+          memory: "3096M"
+        reservations:
           cpus: "0.70"
           memory: "2048M"
-        reservations:
-          cpus: "0.50"
-          memory: "1024M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
   memcached1:
     image: memcached:1.6.17
     networks:
