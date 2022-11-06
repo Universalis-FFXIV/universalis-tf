@@ -67,7 +67,7 @@ services:
         constraints:
           - "node.labels.mogboard.db-data == true"
   s3sync:
-    image: "karashiiro/universalis-s3sync-mariadb:latest"
+    image: "karashiiro/universalis-s3sync:latest"
     environment:
       AWS_SECRET_CSV: "/run/secrets/wasabi_swarm"
       AWS_ENDPOINT: "s3.eu-west-1.wasabisys.com"
