@@ -66,6 +66,52 @@ services:
       placement:
         constraints:
           - "node.labels.mogboard.db-data == true"
+  s3sync:
+    image: "karashiiro/universalis-s3sync-mariadb:latest"
+    environment:
+      AWS_SECRET_CSV: "/run/secrets/wasabi_swarm"
+      AWS_ENDPOINT: "s3.eu-west-1.wasabisys.com"
+      AWS_PROFILE: "swarm"
+      SYNC_SOURCE: "/mnt/website-db/dump"
+      SYNC_TARGET: "arn:aws:s3:::universalis-mogboard-backup/dump"
+    volumes:
+      - "/mnt/website-db/dump:/dump"
+    networks:
+      - "net"
+    deploy:
+      replicas: 0
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=0 0 0 * * *"
+        - "swarm.cronjob.skip-running=false"
+      restart_policy:
+        condition: "none"
+      placement:
+        constraints:
+          - "node.labels.mogboard.db-data == true"
+  mariadb-s3sync:
+    image: "karashiiro/universalis-s3sync-mariadb:latest"
+    environment:
+      REMOTE_MYSQL_ADDR: "mariadb"
+      REMOTE_MYSQL_PORT: 3306
+      REMOTE_MYSQL_ROOT_PASSWORD: "dalamud"
+      REMOTE_MYSQL_DATABASE: "dalamud"
+      DUMP_PATH: "/dump"
+    volumes:
+      - "/mnt/website-db/dump:/dump"
+    networks:
+      - "net"
+    deploy:
+      replicas: 0
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=0 0 */2 * * *"
+        - "swarm.cronjob.skip-running=false"
+      restart_policy:
+        condition: "none"
+      placement:
+        constraints:
+          - "node.labels.mogboard.db-data == true"
   universalis:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
