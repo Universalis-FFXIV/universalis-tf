@@ -33,6 +33,8 @@ services:
     image: "ghcr.io/universalis-ffxiv/mogboard-next:latest"
     env_file:
       - "/universalis/mogboard.env"
+    depends_on:
+      - "mariadb"
     networks:
       - "net"
     deploy:
@@ -66,46 +68,32 @@ services:
       placement:
         constraints:
           - "node.labels.mogboard.db-data == true"
-  s3sync:
-    image: "karashiiro/universalis-s3sync:latest"
-    environment:
-      AWS_SECRET_CSV: "/run/secrets/wasabi_swarm"
-      AWS_ENDPOINT: "s3.eu-west-1.wasabisys.com"
-      AWS_PROFILE: "swarm"
-      SYNC_SOURCE: "/mnt/website-db/dump"
-      SYNC_TARGET: "arn:aws:s3:::universalis-mogboard-backup/dump"
-    volumes:
-      - "/mnt/website-db/dump:/dump"
-    networks:
-      - "net"
-    deploy:
-      replicas: 0
-      labels:
-        - "swarm.cronjob.enable=true"
-        - "swarm.cronjob.schedule=0 0 0 * * *"
-        - "swarm.cronjob.skip-running=false"
-      restart_policy:
-        condition: "none"
-      placement:
-        constraints:
-          - "node.labels.mogboard.db-data == true"
   mariadb-s3sync:
     image: "karashiiro/universalis-s3sync-mariadb:latest"
     environment:
+      AWS_SECRET_CSV: "/run/secrets/wasabi_swarm"
+      AWS_ENDPOINT: "https://s3.eu-west-1.wasabisys.com"
+      AWS_PROFILE: "swarm"
+      SYNC_SOURCE: "/dump"
+      SYNC_TARGET: "s3://universalis-mogboard-backup"
       REMOTE_MYSQL_ADDR: "mariadb"
       REMOTE_MYSQL_PORT: 3306
       REMOTE_MYSQL_ROOT_PASSWORD: "dalamud"
       REMOTE_MYSQL_DATABASE: "dalamud"
-      DUMP_PATH: "/dump"
+      DUMP_PATH: "/dump/mogboard.sql"
+    secrets:
+      - "wasabi_swarm"
     volumes:
       - "/mnt/website-db/dump:/dump"
     networks:
       - "net"
+    depends_on:
+      - "mariadb"
     deploy:
       replicas: 0
       labels:
         - "swarm.cronjob.enable=true"
-        - "swarm.cronjob.schedule=0 0 */2 * * *"
+        - "swarm.cronjob.schedule=0 0 * * * *"
         - "swarm.cronjob.skip-running=false"
       restart_policy:
         condition: "none"
@@ -227,4 +215,7 @@ networks:
       # Hetzner networks have an MTU of 1450
       com.docker.network.driver.mtu: 1450
   traefik-public:
+    external: true
+secrets:
+  wasabi_swarm:
     external: true
