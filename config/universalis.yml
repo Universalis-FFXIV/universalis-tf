@@ -116,7 +116,7 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 5
+      replicas: 4
       resources:
         limits:
           cpus: "3.70"
