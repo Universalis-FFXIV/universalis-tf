@@ -9,7 +9,7 @@ services:
       - "net"
       - "traefik-public"
     deploy:
-      replicas: 5
+      replicas: 6
       resources:
         limits:
           cpus: "0.30"
@@ -104,25 +104,26 @@ services:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Maximum Pool Size=20;Max Auto Prepare=30"
+      UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100;CommandTimeout=60"
       UNIVERSALIS_MEMCACHED_CONNECTION: "memcached1,memcached2,memcached3"
     depends_on:
       - "rabbitmq"
-      - "postgres"
+      - "pgbouncer"
       - "memcached1"
       - "memcached2"
       - "memcached3"
     networks:
       - "net"
     deploy:
-      replicas: 4
+      replicas: 5
       resources:
         limits:
           cpus: "3.70"
-          memory: "4096M"
+          memory: "5120M"
         reservations:
           cpus: "2.00"
-          memory: "2048M"
+          memory: "4096M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -189,6 +190,7 @@ services:
           - "node.labels.cluster.critical != true"
   postgres:
     image: "postgres:14.3"
+    command: "postgres -c max_connections=200"
     environment:
       POSTGRES_USER: "universalis"
       POSTGRES_PASSWORD: "universalis"
@@ -200,13 +202,32 @@ services:
       resources:
         limits:
           cpus: "2.70"
-          memory: "6144M"
+          memory: "7168M"
         reservations:
           cpus: "2.00"
-          memory: "2048M"
+          memory: "3072M"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
+  pgbouncer:
+    image: "edoburu/pgbouncer:1.17.0"
+    environment:
+      AUTH_TYPE: "plain"
+      DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
+      DEFAULT_POOL_SIZE: "100"
+      MAX_CLIENT_CONN: "550"
+      MAX_DB_CONNECTIONS: "190"
+      POOL_MODE: "statement"
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: "256M"
+        reservations:
+          cpus: "0.50"
+          memory: "128M"
   postgres-s3sync:
     image: "karashiiro/universalis-s3sync-postgres:latest"
     environment:
