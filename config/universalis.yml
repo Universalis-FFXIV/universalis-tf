@@ -105,7 +105,7 @@ services:
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100;CommandTimeout=60"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=400;CommandTimeout=60"
       UNIVERSALIS_MEMCACHED_CONNECTION: "memcached1,memcached2,memcached3"
     depends_on:
       - "rabbitmq"
@@ -190,7 +190,7 @@ services:
           - "node.labels.cluster.critical != true"
   postgres:
     image: "postgres:14.3"
-    command: "postgres -c max_connections=200"
+    command: "postgres -c max_connections=400"
     environment:
       POSTGRES_USER: "universalis"
       POSTGRES_PASSWORD: "universalis"
@@ -214,9 +214,9 @@ services:
     environment:
       AUTH_TYPE: "plain"
       DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
-      DEFAULT_POOL_SIZE: "100"
-      MAX_CLIENT_CONN: "550"
-      MAX_DB_CONNECTIONS: "190"
+      DEFAULT_POOL_SIZE: "400"
+      MAX_CLIENT_CONN: "2000"
+      MAX_DB_CONNECTIONS: "400"
       POOL_MODE: "statement"
     networks:
       - "net"
