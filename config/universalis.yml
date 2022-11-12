@@ -105,14 +105,15 @@ services:
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1,cache2,cache3,abortConnect=false"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=400;CommandTimeout=60"
       UNIVERSALIS_MEMCACHED_CONNECTION: "memcached1,memcached2,memcached3"
     depends_on:
       - "rabbitmq"
       - "pgbouncer"
-      - "memcached1"
-      - "memcached2"
-      - "memcached3"
+      - "cache1"
+      - "cache2"
+      - "cache3"
     networks:
       - "net"
     deploy:
@@ -143,8 +144,8 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-  memcached1:
-    image: memcached:1.6.17
+  cache1:
+    image: "redis:7.0.0"
     networks:
       - "net"
     deploy:
@@ -158,8 +159,8 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-  memcached2:
-    image: memcached:1.6.17
+  cache2:
+    image: "redis:7.0.0"
     networks:
       - "net"
     deploy:
@@ -173,8 +174,8 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-  memcached3:
-    image: memcached:1.6.17
+  cache3:
+    image: "redis:7.0.0"
     networks:
       - "net"
     deploy:
