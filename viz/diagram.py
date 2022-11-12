@@ -7,7 +7,7 @@ from diagrams.onprem.certificates import LetsEncrypt
 from diagrams.onprem.compute import Server
 from diagrams.onprem.container import Docker
 from diagrams.onprem.database import Postgresql, Mariadb
-from diagrams.onprem.inmemory import Redis, Memcached
+from diagrams.onprem.inmemory import Redis
 from diagrams.onprem.network import Nginx, Traefik
 from diagrams.programming.framework import React
 from diagrams.programming.language import Csharp
@@ -60,7 +60,7 @@ with Diagram("Universalis", show=False):
                 universalis_db = Postgresql("API Database")
 
                 with Cluster("Distributed Cache"):
-                    universalis_cache = Memcached("memcached")
+                    universalis_cache = Redis("Redis")
 
                 universalis_api >> universalis_redis  # type: ignore
                 universalis_api >> universalis_db  # type: ignore

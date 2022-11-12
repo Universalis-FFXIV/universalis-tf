@@ -105,9 +105,8 @@ services:
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1,cache2,cache3,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379,resolveDns=true,abortConnect=false"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=400;CommandTimeout=60"
-      UNIVERSALIS_MEMCACHED_CONNECTION: "memcached1,memcached2,memcached3"
     depends_on:
       - "rabbitmq"
       - "pgbouncer"
@@ -146,46 +145,49 @@ services:
           - "node.labels.cluster.critical != true"
   cache1:
     image: "redis:7.0.0"
+    command: "redis-server --save \"\" --loglevel warning"
     networks:
       - "net"
     deploy:
       resources:
         limits:
           cpus: "0.30"
-          memory: "512M"
+          memory: "2048M"
         reservations:
           cpus: "0.20"
-          memory: "128M"
+          memory: "2048M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
   cache2:
     image: "redis:7.0.0"
+    command: "redis-server --save \"\" --replicaof cache1 6379 --loglevel warning"
     networks:
       - "net"
     deploy:
       resources:
         limits:
           cpus: "0.30"
-          memory: "512M"
+          memory: "2048M"
         reservations:
           cpus: "0.20"
-          memory: "128M"
+          memory: "2048M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
   cache3:
     image: "redis:7.0.0"
+    command: "redis-server --save \"\" --replicaof cache1 6379 --loglevel warning"
     networks:
       - "net"
     deploy:
       resources:
         limits:
           cpus: "0.30"
-          memory: "512M"
+          memory: "2048M"
         reservations:
           cpus: "0.20"
-          memory: "128M"
+          memory: "2048M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
