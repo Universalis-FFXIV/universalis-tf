@@ -257,10 +257,10 @@ services:
       resources:
         limits:
           cpus: "3.50"
-          memory: "6144M"
+          memory: "8192M"
         reservations:
           cpus: "2.50"
-          memory: "3072M"
+          memory: "6144M"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
