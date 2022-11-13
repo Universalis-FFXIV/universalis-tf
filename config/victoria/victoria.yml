@@ -1,0 +1,66 @@
+version: "3.5"
+services:
+  victoria:
+    image: "victoriametrics/victoria-metrics:v1.79.5"
+    command:
+      - "-promscrape.config=/prometheus.yml"
+    volumes:
+      - "/mnt/metrics-db/victoria:/victoria-metrics-data"
+      - "/mnt/metrics-db/victoria-config/prometheus.yml:/prometheus.yml"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.30"
+          memory: "256M"
+      placement:
+        constraints:
+          - node.labels.victoria.victoria-data == true
+  grafana:
+    image: "grafana/grafana:8.5.15"
+    environment:
+      GF_SERVER_DOMAIN: "monitor.universalis.app"
+    volumes:
+      - "/mnt/metrics-db/grafana:/var/lib/grafana"
+    networks:
+      - "net"
+      - "traefik-public"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.30"
+          memory: "256M"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.grafana-http.rule=Host(`monitor.universalis.app`)
+        - traefik.http.routers.grafana-http.entrypoints=http
+        - traefik.http.routers.grafana-http.middlewares=https-redirect
+        - traefik.http.routers.grafana-https.rule=Host(`monitor.universalis.app`)
+        - traefik.http.routers.grafana-https.entrypoints=https
+        - traefik.http.routers.grafana-https.tls=true
+        - traefik.http.routers.grafana-https.tls.certresolver=le
+        - traefik.http.services.grafana.loadbalancer.server.port=3000
+      placement:
+        constraints:
+          - node.labels.grafana.grafana-data == true
+networks:
+  net:
+    driver: "overlay"
+    attachable: true
+    driver_opts:
+      # Hetzner networks have an MTU of 1450
+      com.docker.network.driver.mtu: 1450
+  victoria:
+    external: true
+  traefik-public:
+    external: true

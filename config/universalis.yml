@@ -115,6 +115,7 @@ services:
       - "cache3"
     networks:
       - "net"
+      - "victoria"
     deploy:
       replicas: 4
       resources:
@@ -141,6 +142,7 @@ services:
       - "cache-canary2"
     networks:
       - "net"
+      - "victoria"
     deploy:
       replicas: 1
       resources:
@@ -323,6 +325,8 @@ networks:
       # Hetzner networks have an MTU of 1450
       com.docker.network.driver.mtu: 1450
   traefik-public:
+    external: true
+  victoria:
     external: true
 secrets:
   wasabi_swarm:

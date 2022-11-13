@@ -76,12 +76,15 @@ services:
       - --accesslog
       # Enable the Traefik log, for configurations and errors
       - --log
+      # Enable Prometheus metrics
+      - --metrics.prometheus=true
       # Enable the Dashboard and API
       - --api
     networks:
       # Use the public network created to be shared between Traefik and
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
+      - victoria
 
 volumes:
   # Create a volume to store the certificates, there is a constraint to make sure
@@ -90,7 +93,7 @@ volumes:
   traefik-public-certificates:
 
 networks:
-  # Use the previously created public network "traefik-public", shared with other
-  # services that need to be publicly available via this Traefik
   traefik-public:
+    external: true
+  victoria:
     external: true

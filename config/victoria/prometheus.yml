@@ -1,0 +1,16 @@
+global:
+  scrape_interval: "5s"
+  scrape_timeout: "5s"
+scrape_configs:
+- job_name: "Traefik"
+  static_configs:
+  - targets:
+    - "traefik:8080"
+- job_name: "Universalis"
+  static_configs:
+  - targets:
+    - "universalis:4002"
+- job_name: "Universalis Canary"
+  static_configs:
+  - targets:
+    - "universalis-canary:4002"

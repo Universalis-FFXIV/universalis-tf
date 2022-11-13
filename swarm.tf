@@ -246,6 +246,14 @@ resource "hcloud_volume" "api_db" {
   delete_protection = true
 }
 
+resource "hcloud_volume" "metrics_db" {
+  name              = "metrics-db"
+  location          = "hel1"
+  size              = 20
+  format            = "ext4"
+  delete_protection = true
+}
+
 resource "hcloud_volume_attachment" "website_db_ref" {
   volume_id = hcloud_volume.website_db.id
   server_id = hcloud_server.swarm_worker_1.id
@@ -255,6 +263,12 @@ resource "hcloud_volume_attachment" "website_db_ref" {
 resource "hcloud_volume_attachment" "api_db_ref" {
   volume_id = hcloud_volume.api_db.id
   server_id = hcloud_server.swarm_worker_2.id
+  automount = true
+}
+
+resource "hcloud_volume_attachment" "metrics_db_ref" {
+  volume_id = hcloud_volume.metrics_db.id
+  server_id = hcloud_server.swarm_worker_1.id
   automount = true
 }
 
