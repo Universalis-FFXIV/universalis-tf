@@ -38,7 +38,7 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 3
+      replicas: 4
       resources:
         limits:
           cpus: "0.50"
@@ -256,10 +256,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2.70"
-          memory: "7168M"
+          cpus: "3.50"
+          memory: "6144M"
         reservations:
-          cpus: "2.00"
+          cpus: "2.50"
           memory: "3072M"
       placement:
         constraints:
