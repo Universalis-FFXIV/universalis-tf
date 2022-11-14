@@ -7,10 +7,20 @@ scrape_configs:
   - targets:
     - "traefik:8080"
 - job_name: "Universalis"
-  static_configs:
-  - targets:
-    - "universalis:4002"
+  dns_sd_configs:
+  - names:
+    - "tasks.universalis"
+    type: "A"
+    port: 4002
 - job_name: "Universalis Canary"
-  static_configs:
-  - targets:
-    - "universalis-canary:4002"
+  dns_sd_configs:
+  - names:
+    - "tasks.universalis-canary"
+    type: "A"
+    port: 4002
+- job_name: "cadvisor"
+  dns_sd_configs:
+  - names:
+    - "tasks.cadvisor"
+    type: "A"
+    port: 8080

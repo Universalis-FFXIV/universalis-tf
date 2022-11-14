@@ -268,7 +268,7 @@ resource "hcloud_volume_attachment" "api_db_ref" {
 
 resource "hcloud_volume_attachment" "metrics_db_ref" {
   volume_id = hcloud_volume.metrics_db.id
-  server_id = hcloud_server.swarm_worker_1.id
+  server_id = hcloud_server.swarm_manager_2.id
   automount = true
 }
 

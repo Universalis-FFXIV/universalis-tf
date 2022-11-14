@@ -5,6 +5,7 @@ services:
     command:
       - "-promscrape.config=/prometheus.yml"
     volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/mnt/metrics-db/victoria:/victoria-metrics-data"
       - "/mnt/metrics-db/victoria-config/prometheus.yml:/prometheus.yml"
     networks:
@@ -13,14 +14,37 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
-        reservations:
-          cpus: "0.30"
+          cpus: "0.10"
           memory: "256M"
+        reservations:
+          cpus: "0.05"
+          memory: "128M"
       placement:
         constraints:
-          - node.labels.victoria.victoria-data == true
+          - "node.role == manager"
+          - "node.labels.victoria.victoria-data == true"
+  cadvisor:
+    image: "gcr.io/cadvisor/cadvisor:v0.46.0"
+    command:
+      - "-docker_only"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:ro"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker:/var/lib/docker:ro"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      mode: "global"
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "256M"
+        reservations:
+          cpus: "0.05"
+          memory: "128M"
   grafana:
     image: "grafana/grafana:8.5.15"
     environment:
@@ -33,11 +57,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "0.05"
+          memory: "128M"
         reservations:
-          cpus: "0.30"
-          memory: "256M"
+          cpus: "0.01"
+          memory: "64M"
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -52,7 +76,7 @@ services:
         - traefik.http.services.grafana.loadbalancer.server.port=3000
       placement:
         constraints:
-          - node.labels.grafana.grafana-data == true
+          - "node.labels.grafana.grafana-data == true"
 networks:
   net:
     driver: "overlay"
