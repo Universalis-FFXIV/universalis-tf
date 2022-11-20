@@ -25,14 +25,13 @@ services:
           - "node.labels.victoria.victoria-data == true"
   cadvisor:
     image: "gcr.io/cadvisor/cadvisor:v0.46.0"
-    command:
-      - "-docker_only"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/:/rootfs:ro"
       - "/var/run:/var/run:ro"
       - "/sys:/sys:ro"
       - "/var/lib/docker:/var/lib/docker:ro"
+      - "/dev/disk:/dev/disk:ro"
     networks:
       - "net"
       - "victoria"
@@ -40,10 +39,10 @@ services:
       mode: "global"
       resources:
         limits:
-          cpus: "0.10"
+          cpus: "0.20"
           memory: "256M"
         reservations:
-          cpus: "0.05"
+          cpus: "0.10"
           memory: "128M"
   grafana:
     image: "grafana/grafana:8.5.15"
