@@ -181,10 +181,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
+          cpus: "0.50"
           memory: "2048M"
         reservations:
-          cpus: "0.20"
+          cpus: "0.40"
           memory: "2048M"
       placement:
         constraints:
