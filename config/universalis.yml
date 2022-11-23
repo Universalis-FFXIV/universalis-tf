@@ -260,10 +260,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "3.50"
+          cpus: "5.00"
           memory: "8192M"
         reservations:
-          cpus: "2.50"
+          cpus: "3.00"
           memory: "6144M"
       placement:
         constraints:
@@ -274,7 +274,7 @@ services:
       AUTH_TYPE: "plain"
       DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
       DEFAULT_POOL_SIZE: "400"
-      MAX_CLIENT_CONN: "2400"
+      MAX_CLIENT_CONN: "3000"
       MAX_DB_CONNECTIONS: "400"
       POOL_MODE: "statement"
     networks:
