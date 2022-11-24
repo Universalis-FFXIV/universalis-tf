@@ -14,10 +14,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.20"
+          cpus: "0.30"
           memory: "512M"
         reservations:
-          cpus: "0.10"
+          cpus: "0.20"
           memory: "256M"
       placement:
         constraints:
@@ -56,10 +56,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.05"
+          cpus: "0.25"
           memory: "128M"
         reservations:
-          cpus: "0.01"
+          cpus: "0.15"
           memory: "64M"
       labels:
         - traefik.enable=true

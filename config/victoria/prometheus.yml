@@ -12,10 +12,10 @@ scrape_configs:
     - "tasks.universalis"
     type: "A"
     port: 4002
-- job_name: "Universalis Canary"
+- job_name: "Universalis Staging"
   dns_sd_configs:
   - names:
-    - "tasks.universalis-canary"
+    - "tasks.universalis-staging"
     type: "A"
     port: 4002
 - job_name: "cadvisor"

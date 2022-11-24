@@ -21,10 +21,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.universalis-http.rule=Host(`universalis.app`) || Host(`canary.universalis.app`)
+        - traefik.http.routers.universalis-http.rule=Host(`universalis.app`, `staging.universalis.app`)
         - traefik.http.routers.universalis-http.entrypoints=http
         - traefik.http.routers.universalis-http.middlewares=https-redirect
-        - traefik.http.routers.universalis-https.rule=Host(`universalis.app`) || Host(`canary.universalis.app`)
+        - traefik.http.routers.universalis-https.rule=Host(`universalis.app`, `staging.universalis.app`)
         - traefik.http.routers.universalis-https.entrypoints=https
         - traefik.http.routers.universalis-https.tls=true
         - traefik.http.routers.universalis-https.tls.certresolver=le
@@ -104,9 +104,10 @@ services:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379,resolveDns=true,abortConnect=false"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=400;CommandTimeout=60"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=380;CommandTimeout=60"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -121,27 +122,29 @@ services:
       replicas: 4
       resources:
         limits:
-          cpus: "3.70"
-          memory: "5120M"
+          cpus: "3.00"
+          memory: "4192M"
         reservations:
           cpus: "2.70"
           memory: "3096M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-  universalis-canary:
+          - "node.labels.infra.strange != true"
+  universalis-staging:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-canary1:6379,cache-canary2:6379,resolveDns=true,abortConnect=false"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379,resolveDns=true,abortConnect=false"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=380;CommandTimeout=60"
     depends_on:
       - "mariadb"
       - "rabbitmq"
       - "pgbouncer"
-      - "cache-canary1"
-      - "cache-canary2"
+      - "cache-staging1"
+      - "cache-staging2"
     networks:
       - "net"
       - "victoria"
@@ -149,10 +152,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "2.50"
+          cpus: "0.50"
           memory: "2048M"
         reservations:
-          cpus: "2.00"
+          cpus: "0.30"
           memory: "1024M"
       placement:
         constraints:
@@ -221,7 +224,7 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-  cache-canary1:
+  cache-staging1:
     image: "redis:7.0.0"
     command: "redis-server --save \"\" --loglevel warning"
     networks:
@@ -229,27 +232,27 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.07"
+          cpus: "0.20"
           memory: "512M"
         reservations:
-          cpus: "0.03"
+          cpus: "0.15"
           memory: "512M"
-  cache-canary2:
+  cache-staging2:
     image: "redis:7.0.0"
-    command: "redis-server --save \"\" --loglevel warning"
+    command: "redis-server --save \"\" --replicaof cache-staging1 6379 --loglevel warning"
     networks:
       - "net"
     deploy:
       resources:
         limits:
-          cpus: "0.07"
+          cpus: "0.20"
           memory: "512M"
         reservations:
-          cpus: "0.03"
+          cpus: "0.15"
           memory: "512M"
   postgres:
     image: "postgres:14.3"
-    command: "postgres -c max_connections=400"
+    command: "postgres -c max_connections=200"
     environment:
       POSTGRES_USER: "universalis"
       POSTGRES_PASSWORD: "universalis"
@@ -261,10 +264,10 @@ services:
       resources:
         limits:
           cpus: "5.00"
-          memory: "8192M"
+          memory: "10240M"
         reservations:
           cpus: "3.00"
-          memory: "6144M"
+          memory: "8192M"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
@@ -273,10 +276,10 @@ services:
     environment:
       AUTH_TYPE: "plain"
       DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
-      DEFAULT_POOL_SIZE: "400"
-      MAX_CLIENT_CONN: "3000"
-      MAX_DB_CONNECTIONS: "400"
-      POOL_MODE: "statement"
+      MAX_CLIENT_CONN: "10000"
+      DEFAULT_POOL_SIZE: "198"
+      MAX_DB_CONNECTIONS: "198"
+      POOL_MODE: "transaction"
     networks:
       - "net"
     deploy:
