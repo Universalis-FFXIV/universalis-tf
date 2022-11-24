@@ -119,10 +119,10 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 4
+      replicas: 3
       resources:
         limits:
-          cpus: "3.00"
+          cpus: "3.70"
           memory: "4192M"
         reservations:
           cpus: "2.70"
@@ -327,8 +327,9 @@ networks:
     driver: "overlay"
     attachable: true
     driver_opts:
-      # Hetzner networks have an MTU of 1450
-      com.docker.network.driver.mtu: 1450
+      # Hetzner networks have an MTU of 1450, but setting our MTU to that
+      # randomly causes issues for some reason.
+      com.docker.network.driver.mtu: 1400
   traefik-public:
     external: true
   victoria:
