@@ -238,19 +238,27 @@ resource "hcloud_volume" "website_db" {
   delete_protection = true
 }
 
-resource "hcloud_volume" "api_db_1" {
-  name              = "api-db-1"
+resource "hcloud_volume" "api_db" {
+  name              = "api-db"
   location          = "hel1"
   size              = 60
   format            = "ext4"
   delete_protection = true
 }
 
-resource "hcloud_volume" "api_db" {
+resource "hcloud_volume" "api_db_1" {
+  name              = "api-db-1"
+  location          = "hel1"
+  size              = 60
+  format            = "xfs"
+  delete_protection = true
+}
+
+resource "hcloud_volume" "api_db_2" {
   name              = "api-db-2"
   location          = "hel1"
   size              = 60
-  format            = "ext4"
+  format            = "xfs"
   delete_protection = true
 }
 
@@ -258,7 +266,7 @@ resource "hcloud_volume" "api_db_3" {
   name              = "api-db-3"
   location          = "hel1"
   size              = 60
-  format            = "ext4"
+  format            = "xfs"
   delete_protection = true
 }
 
@@ -276,14 +284,20 @@ resource "hcloud_volume_attachment" "website_db_ref" {
   automount = true
 }
 
+resource "hcloud_volume_attachment" "api_db_ref" {
+  volume_id = hcloud_volume.api_db.id
+  server_id = hcloud_server.swarm_worker_2.id
+  automount = true
+}
+
 resource "hcloud_volume_attachment" "api_db_1_ref" {
   volume_id = hcloud_volume.api_db_1.id
   server_id = hcloud_server.swarm_worker_1.id
   automount = true
 }
 
-resource "hcloud_volume_attachment" "api_db_ref" {
-  volume_id = hcloud_volume.api_db.id
+resource "hcloud_volume_attachment" "api_db_2_ref" {
+  volume_id = hcloud_volume.api_db_2.id
   server_id = hcloud_server.swarm_worker_2.id
   automount = true
 }
