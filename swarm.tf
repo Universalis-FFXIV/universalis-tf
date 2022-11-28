@@ -310,14 +310,6 @@ resource "hcloud_volume" "api_db_2" {
   delete_protection = true
 }
 
-resource "hcloud_volume" "api_db_3" {
-  name              = "api-db-3"
-  location          = "hel1"
-  size              = 60
-  format            = "xfs"
-  delete_protection = true
-}
-
 resource "hcloud_volume" "metrics_db" {
   name              = "metrics-db"
   location          = "hel1"
@@ -340,19 +332,13 @@ resource "hcloud_volume_attachment" "api_db_ref" {
 
 resource "hcloud_volume_attachment" "api_db_1_ref" {
   volume_id = hcloud_volume.api_db_1.id
-  server_id = hcloud_server.swarm_worker_1.id
+  server_id = hcloud_server.scylla_1.id
   automount = true
 }
 
 resource "hcloud_volume_attachment" "api_db_2_ref" {
   volume_id = hcloud_volume.api_db_2.id
-  server_id = hcloud_server.swarm_worker_2.id
-  automount = true
-}
-
-resource "hcloud_volume_attachment" "api_db_3_ref" {
-  volume_id = hcloud_volume.api_db_3.id
-  server_id = hcloud_server.swarm_worker_3.id
+  server_id = hcloud_server.scylla_2.id
   automount = true
 }
 
