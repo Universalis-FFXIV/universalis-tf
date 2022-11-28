@@ -229,6 +229,54 @@ output "swarm_worker_3_ip" {
   value = hcloud_server.swarm_worker_3.ipv4_address
 }
 
+resource "hcloud_server" "scylla_1" {
+  name               = "scylla-1"
+  server_type        = "cx21"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.7"
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+resource "hcloud_server" "scylla_2" {
+  name               = "scylla-2"
+  server_type        = "cx21"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.8"
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+output "scylla_1_ip" {
+  value = hcloud_server.scylla_1.ipv4_address
+}
+
+output "scylla_2_ip" {
+  value = hcloud_server.scylla_2.ipv4_address
+}
+
 # Volumes for the website and API databases
 resource "hcloud_volume" "website_db" {
   name              = "website-db"
@@ -388,6 +436,8 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_manager_3.id,
     hcloud_server.swarm_worker_1.id,
     hcloud_server.swarm_worker_2.id,
-    hcloud_server.swarm_worker_3.id
+    hcloud_server.swarm_worker_3.id,
+    hcloud_server.scylla_1.id,
+    hcloud_server.scylla_2.id
   ]
 }
