@@ -6,10 +6,42 @@ scrape_configs:
   static_configs:
   - targets:
     - "traefik:8080"
+- job_name: "ScyllaDB 1"
+  static_configs:
+  - targets:
+    - "10.0.1.7:9180"
+- job_name: "ScyllaDB 2"
+  static_configs:
+  - targets:
+    - "10.0.1.8:9180"
 - job_name: "Universalis"
   dns_sd_configs:
   - names:
     - "tasks.universalis"
+    type: "A"
+    port: 4002
+- job_name: "Universalis Upload"
+  dns_sd_configs:
+  - names:
+    - "tasks.universalis-upload"
+    type: "A"
+    port: 4002
+- job_name: "Universalis History"
+  dns_sd_configs:
+  - names:
+    - "tasks.universalis-history"
+    type: "A"
+    port: 4002
+- job_name: "Universalis Extra"
+  dns_sd_configs:
+  - names:
+    - "tasks.universalis-extra"
+    type: "A"
+    port: 4002
+- job_name: "Universalis WebSocket"
+  dns_sd_configs:
+  - names:
+    - "tasks.universalis-websocket"
     type: "A"
     port: 4002
 - job_name: "Universalis Staging"

@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  scylla:
+    image: "scylladb/scylla:5.0.5"
+    command:
+      [
+        "--developer-mode",
+        "0",
+        "--listen-address",
+        "10.0.1.7",
+        "--seeds",
+        "10.0.1.7,10.0.1.8",
+        "--alternator-port",
+        "8000",
+        "--alternator-write-isolation",
+        "only_rmw_uses_lwt"
+      ]
+    privileged: true
+    restart: "always"
+    network_mode: "host"
+    volumes:
+      - "/mnt/api-db/scylla:/var/lib/scylla"
