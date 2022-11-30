@@ -40,14 +40,14 @@ resource "hcloud_firewall" "swarm_firewall" {
     direction  = "in"
     protocol   = "tcp"
     port       = "any"
-    source_ips = ["10.0.0.0/16"]
+    source_ips = ["10.0.0.0/16", "95.216.241.171/32"]
   }
 
   rule {
     direction  = "in"
     protocol   = "udp"
     port       = "any"
-    source_ips = ["10.0.0.0/16"]
+    source_ips = ["10.0.0.0/16", "95.216.241.171/32"]
   }
 
   // HTTP
