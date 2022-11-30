@@ -121,14 +121,14 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 2
+      replicas: 4
       resources:
         limits:
-          cpus: "2.00"
-          memory: "2G"
+          cpus: "6.00"
+          memory: "3G"
         reservations:
-          cpus: "2.00"
-          memory: "2G"
+          cpus: "6.00"
+          memory: "3G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -136,6 +136,7 @@ services:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
+      RECEIVE_STREAMING_EVENTS: "true"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
@@ -177,7 +178,7 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 2
+      replicas: 3
       resources:
         limits:
           cpus: "0.25"
@@ -205,14 +206,14 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 5
+      replicas: 2
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "2G"
         reservations:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -236,10 +237,10 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "2.00"
+          cpus: "1.50"
           memory: "2G"
         reservations:
-          cpus: "2.00"
+          cpus: "1.50"
           memory: "2G"
       placement:
         constraints:
@@ -263,11 +264,11 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1G"
+          cpus: "0.10"
+          memory: "512M"
         reservations:
-          cpus: "0.50"
-          memory: "1G"
+          cpus: "0.10"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -276,13 +277,13 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 6
+      replicas: 3
       resources:
         limits:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "32M"
         reservations:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "32M"
       placement:
         constraints:
@@ -295,10 +296,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1024M"
+          cpus: "0.25"
+          memory: "512M"
         reservations:
-          cpus: "0.30"
+          cpus: "0.25"
           memory: "512M"
       placement:
         constraints:
@@ -311,11 +312,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "2048M"
+          cpus: "0.30"
+          memory: "1G"
         reservations:
-          cpus: "0.40"
-          memory: "2048M"
+          cpus: "0.30"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -327,11 +328,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
-          memory: "2048M"
+          cpus: "0.20"
+          memory: "1G"
         reservations:
           cpus: "0.20"
-          memory: "2048M"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -343,11 +344,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
-          memory: "2048M"
+          cpus: "0.20"
+          memory: "1G"
         reservations:
           cpus: "0.20"
-          memory: "2048M"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -359,11 +360,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.20"
-          memory: "512M"
+          cpus: "0.10"
+          memory: "256M"
         reservations:
-          cpus: "0.15"
-          memory: "512M"
+          cpus: "0.10"
+          memory: "256M"
   cache-staging2:
     image: "redis:7.0.0"
     command: "redis-server --save \"\" --replicaof cache-staging1 6379 --loglevel warning"
@@ -372,11 +373,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.20"
-          memory: "512M"
+          cpus: "0.10"
+          memory: "256M"
         reservations:
-          cpus: "0.15"
-          memory: "512M"
+          cpus: "0.10"
+          memory: "256M"
   postgres:
     image: "postgres:14.3"
     command: "postgres -c max_connections=200"
