@@ -9,14 +9,17 @@ services:
       - "net"
       - "traefik-public"
     deploy:
-      replicas: 6
+      replicas: 3
       resources:
         limits:
-          cpus: "0.30"
-          memory: "128M"
+          cpus: "0.20"
+          memory: "64M"
         reservations:
           cpus: "0.20"
           memory: "64M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -37,8 +40,9 @@ services:
       - "mariadb"
     networks:
       - "net"
+      - "traefik-public"
     deploy:
-      replicas: 4
+      replicas: 3
       resources:
         limits:
           cpus: "0.50"
@@ -106,12 +110,10 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379,resolveDns=true,abortConnect=false"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=380;CommandTimeout=60"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
     depends_on:
       - "mariadb"
       - "rabbitmq"
-      - "pgbouncer"
       - "cache1"
       - "cache2"
       - "cache3"
@@ -119,30 +121,139 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 3
+      replicas: 2
       resources:
         limits:
-          cpus: "3.70"
-          memory: "4192M"
+          cpus: "2.00"
+          memory: "2G"
         reservations:
-          cpus: "2.70"
-          memory: "3096M"
+          cpus: "2.00"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-          - "node.labels.infra.strange != true"
+  universalis-websocket:
+    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    environment:
+      ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
+      UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+    depends_on:
+      - "mariadb"
+      - "rabbitmq"
+      - "cache1"
+      - "cache2"
+      - "cache3"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.50"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  universalis-extra:
+    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    environment:
+      ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
+      UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+    depends_on:
+      - "mariadb"
+      - "rabbitmq"
+      - "cache1"
+      - "cache2"
+      - "cache3"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "512M"
+        reservations:
+          cpus: "0.25"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  universalis-history:
+    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    environment:
+      ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
+      UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+    depends_on:
+      - "mariadb"
+      - "rabbitmq"
+      - "cache1"
+      - "cache2"
+      - "cache3"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      replicas: 5
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.50"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  universalis-upload:
+    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    environment:
+      ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
+      UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+    depends_on:
+      - "mariadb"
+      - "rabbitmq"
+      - "cache1"
+      - "cache2"
+      - "cache3"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: "2G"
+        reservations:
+          cpus: "2.00"
+          memory: "2G"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
   universalis-staging:
     image: "ghcr.io/universalis-ffxiv/universalis:latest"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379,resolveDns=true,abortConnect=false"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=380;CommandTimeout=60"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
     depends_on:
       - "mariadb"
       - "rabbitmq"
-      - "pgbouncer"
       - "cache-staging1"
       - "cache-staging2"
     networks:
@@ -153,10 +264,26 @@ services:
       resources:
         limits:
           cpus: "0.50"
-          memory: "2048M"
+          memory: "1G"
         reservations:
-          cpus: "0.30"
-          memory: "1024M"
+          cpus: "0.50"
+          memory: "1G"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
+  scylla-lb:
+    image: "karashiiro/universalis-scylla-nginx:latest"
+    networks:
+      - "net"
+    deploy:
+      replicas: 6
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "32M"
+        reservations:
+          cpus: "0.20"
+          memory: "32M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -263,33 +390,14 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "5.00"
-          memory: "10240M"
+          cpus: "0.30"
+          memory: "512M"
         reservations:
-          cpus: "3.00"
-          memory: "8192M"
+          cpus: "0.30"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
-  pgbouncer:
-    image: "edoburu/pgbouncer:1.17.0"
-    environment:
-      AUTH_TYPE: "plain"
-      DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
-      MAX_CLIENT_CONN: "10000"
-      DEFAULT_POOL_SIZE: "198"
-      MAX_DB_CONNECTIONS: "198"
-      POOL_MODE: "transaction"
-    networks:
-      - "net"
-    deploy:
-      resources:
-        limits:
-          cpus: "1.00"
-          memory: "256M"
-        reservations:
-          cpus: "0.50"
-          memory: "128M"
   postgres-s3sync:
     image: "karashiiro/universalis-s3sync-postgres:latest"
     environment:
@@ -329,7 +437,7 @@ networks:
     driver_opts:
       # Hetzner networks have an MTU of 1450, but setting our MTU to that
       # randomly causes issues for some reason.
-      com.docker.network.driver.mtu: 1400
+      com.docker.network.driver.mtu: 1450
   traefik-public:
     external: true
   victoria:
