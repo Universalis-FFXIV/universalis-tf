@@ -24,9 +24,6 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.middlewares.universalis-ratelimit.ratelimit.average=240
-        - traefik.http.middlewares.universalis-ratelimit.ratelimit.period=1m
-        - traefik.http.middlewares.universalis-ratelimit.ratelimit.sourcecriterion.requestheadername=CF-Connecting-IP
         - traefik.http.routers.universalis-http.rule=Host(`universalis.app`, `staging.universalis.app`)
         - traefik.http.routers.universalis-http.entrypoints=http
         - traefik.http.routers.universalis-http.middlewares=https-redirect
@@ -115,6 +112,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -144,6 +142,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -172,6 +171,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -200,6 +200,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -228,6 +229,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -256,6 +258,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
