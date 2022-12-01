@@ -24,11 +24,15 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
+        - traefik.http.middlewares.universalis-ratelimit.ratelimit.average=240
+        - traefik.http.middlewares.universalis-ratelimit.ratelimit.period=1m
+        - traefik.http.middlewares.universalis-ratelimit.ratelimit.sourcecriterion.requestheadername=CF-Connecting-IP
         - traefik.http.routers.universalis-http.rule=Host(`universalis.app`, `staging.universalis.app`)
         - traefik.http.routers.universalis-http.entrypoints=http
         - traefik.http.routers.universalis-http.middlewares=https-redirect
         - traefik.http.routers.universalis-https.rule=Host(`universalis.app`, `staging.universalis.app`)
         - traefik.http.routers.universalis-https.entrypoints=https
+        - traefik.http.routers.universalis-https.middlewares=universalis-ratelimit@docker
         - traefik.http.routers.universalis-https.tls=true
         - traefik.http.routers.universalis-https.tls.certresolver=le
         - traefik.http.services.universalis.loadbalancer.server.port=80
@@ -45,10 +49,10 @@ services:
       replicas: 3
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1024M"
+          cpus: "0.30"
+          memory: "512M"
         reservations:
-          cpus: "0.25"
+          cpus: "0.30"
           memory: "512M"
   mariadb:
     image: "mariadb:10.3.32"
@@ -64,8 +68,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1024M"
+          cpus: "0.25"
+          memory: "512M"
         reservations:
           cpus: "0.25"
           memory: "512M"
@@ -121,14 +125,14 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 4
+      replicas: 12
       resources:
         limits:
-          cpus: "6.00"
-          memory: "3G"
+          cpus: "2.00"
+          memory: "2G"
         reservations:
-          cpus: "6.00"
-          memory: "3G"
+          cpus: "2.00"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -153,11 +157,11 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "1G"
         reservations:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -209,10 +213,10 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "1.00"
+          cpus: "1.50"
           memory: "2G"
         reservations:
-          cpus: "1.00"
+          cpus: "1.50"
           memory: "2G"
       placement:
         constraints:
@@ -277,13 +281,13 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 3
+      replicas: 2
       resources:
         limits:
-          cpus: "0.50"
+          cpus: "2.00"
           memory: "32M"
         reservations:
-          cpus: "0.50"
+          cpus: "2.00"
           memory: "32M"
       placement:
         constraints:
@@ -436,9 +440,8 @@ networks:
     driver: "overlay"
     attachable: true
     driver_opts:
-      # Hetzner networks have an MTU of 1450, but setting our MTU to that
-      # randomly causes issues for some reason.
-      com.docker.network.driver.mtu: 1450
+      # Hetzner networks have an MTU of 1400
+      com.docker.network.driver.mtu: 1400
   traefik-public:
     external: true
   victoria:

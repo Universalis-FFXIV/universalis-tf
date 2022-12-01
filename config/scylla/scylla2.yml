@@ -7,6 +7,8 @@ services:
       [
         "--developer-mode",
         "0",
+        "--smp",
+        "4",
         "--listen-address",
         "10.0.1.8",
         "--seeds",
