@@ -29,7 +29,6 @@ services:
         - traefik.http.routers.universalis-http.middlewares=https-redirect
         - traefik.http.routers.universalis-https.rule=Host(`universalis.app`, `staging.universalis.app`)
         - traefik.http.routers.universalis-https.entrypoints=https
-        - traefik.http.routers.universalis-https.middlewares=universalis-ratelimit@docker
         - traefik.http.routers.universalis-https.tls=true
         - traefik.http.routers.universalis-https.tls.certresolver=le
         - traefik.http.services.universalis.loadbalancer.server.port=80
@@ -123,7 +122,7 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 12
+      replicas: 9
       resources:
         limits:
           cpus: "2.00"
@@ -143,6 +142,8 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -185,11 +186,11 @@ services:
       replicas: 3
       resources:
         limits:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.50"
+          memory: "1G"
         reservations:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.50"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -201,6 +202,8 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -230,6 +233,8 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "rabbitmq"
