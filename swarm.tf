@@ -83,7 +83,7 @@ resource "hcloud_ssh_key" "swarm_ssh" {
 # Provision the manager nodes
 resource "hcloud_server" "swarm_manager_1" {
   name               = "swarm-manager-1"
-  server_type        = "cx21"
+  server_type        = "cpx21"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -231,7 +231,7 @@ output "swarm_worker_3_ip" {
 
 resource "hcloud_server" "scylla_1" {
   name               = "scylla-1"
-  server_type        = "cx21"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -251,7 +251,7 @@ resource "hcloud_server" "scylla_1" {
 
 resource "hcloud_server" "scylla_2" {
   name               = "scylla-2"
-  server_type        = "cx21"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -297,7 +297,7 @@ resource "hcloud_volume" "api_db" {
 resource "hcloud_volume" "api_db_1" {
   name              = "api-db-1"
   location          = "hel1"
-  size              = 60
+  size              = 100
   format            = "xfs"
   delete_protection = true
 }
@@ -305,7 +305,7 @@ resource "hcloud_volume" "api_db_1" {
 resource "hcloud_volume" "api_db_2" {
   name              = "api-db-2"
   location          = "hel1"
-  size              = 60
+  size              = 100
   format            = "xfs"
   delete_protection = true
 }
