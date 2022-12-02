@@ -2,11 +2,13 @@ version: "3.9"
 
 services:
   scylla:
-    image: "scylladb/scylla:5.0.5"
+    image: "scylladb/scylla:5.1.0"
     command:
       [
         "--developer-mode",
         "0",
+        "--smp",
+        "4",
         "--listen-address",
         "10.0.1.8",
         "--seeds",

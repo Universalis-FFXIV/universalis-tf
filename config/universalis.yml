@@ -45,10 +45,10 @@ services:
       replicas: 3
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1024M"
+          cpus: "0.30"
+          memory: "512M"
         reservations:
-          cpus: "0.25"
+          cpus: "0.30"
           memory: "512M"
   mariadb:
     image: "mariadb:10.3.32"
@@ -64,8 +64,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1024M"
+          cpus: "0.25"
+          memory: "512M"
         reservations:
           cpus: "0.25"
           memory: "512M"
@@ -111,6 +111,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -121,14 +122,14 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 4
+      replicas: 8
       resources:
         limits:
-          cpus: "6.00"
-          memory: "3G"
+          cpus: "2.00"
+          memory: "2G"
         reservations:
-          cpus: "6.00"
-          memory: "3G"
+          cpus: "2.00"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -140,6 +141,9 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -153,11 +157,11 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "1G"
         reservations:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -168,6 +172,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -181,11 +186,11 @@ services:
       replicas: 3
       resources:
         limits:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.50"
+          memory: "1G"
         reservations:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.50"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -196,6 +201,9 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -209,10 +217,10 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "1.00"
+          cpus: "1.50"
           memory: "2G"
         reservations:
-          cpus: "1.00"
+          cpus: "1.50"
           memory: "2G"
       placement:
         constraints:
@@ -224,6 +232,9 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -252,6 +263,7 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
       - "rabbitmq"
@@ -277,13 +289,13 @@ services:
     networks:
       - "net"
     deploy:
-      replicas: 3
+      replicas: 2
       resources:
         limits:
-          cpus: "0.50"
+          cpus: "2.00"
           memory: "32M"
         reservations:
-          cpus: "0.50"
+          cpus: "2.00"
           memory: "32M"
       placement:
         constraints:
@@ -436,9 +448,8 @@ networks:
     driver: "overlay"
     attachable: true
     driver_opts:
-      # Hetzner networks have an MTU of 1450, but setting our MTU to that
-      # randomly causes issues for some reason.
-      com.docker.network.driver.mtu: 1450
+      # Hetzner networks have an MTU of 1400
+      com.docker.network.driver.mtu: 1400
   traefik-public:
     external: true
   victoria:
