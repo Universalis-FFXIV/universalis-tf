@@ -11,6 +11,7 @@ services:
         "--smp",
         "4",
         "--overprovisioned",
+        "1",
         "--listen-address",
         "10.0.1.8",
         "--seeds",
