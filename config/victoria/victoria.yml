@@ -14,11 +14,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
-          memory: "512M"
+          cpus: "2.00"
+          memory: "2G"
         reservations:
-          cpus: "0.20"
-          memory: "256M"
+          cpus: "2.00"
+          memory: "2G"
       placement:
         constraints:
           - "node.role == manager"
