@@ -39,7 +39,13 @@ with psycopg2.connect("host=postgres dbname=universalis user=universalis passwor
 
             if batch_rows == BATCH_SIZE:
                 logging.info("Executing batch insert of %d rows.", BATCH_SIZE)
-                scylla_session.execute(batch)
+                batch_executed = False
+                while not batch_executed:
+                    try:
+                        scylla_session.execute(batch)
+                        batch_executed = True
+                    except Exception as e:
+                        logging.error(e)
                 batch = BatchStatement()
                 batch_rows = 0
 
