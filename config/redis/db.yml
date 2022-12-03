@@ -1,15 +1,17 @@
 version: "2.4"
 services:
   redis:
-    image: redis:7.0.0
+    image: "redis:7.0.0"
     command:
       - "redis-server"
       - "--save"
-      - "''"
+      - ""
       - "--repl-diskless-sync"
       - "yes"
       - "--repl-diskless-load"
       - "swapdb"
+      - "--hash-max-ziplist-value"
+      - "128"
       - "--client-output-buffer-limit"
       - "normal"
       - "0"
@@ -25,8 +27,6 @@ services:
       - "60"
       - "--loglevel"
       - "warning"
-    ports:
-      - "6379:6379"
     volumes:
       - "/home/universalis/db/data:/data:ro"
     network_mode: "host"
