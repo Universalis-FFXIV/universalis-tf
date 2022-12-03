@@ -2,7 +2,29 @@ version: "2.4"
 services:
   redis:
     image: redis:7.0.0
-    command: "redis-server --save '' --repl-diskless-sync yes --repl-diskless-load swapdb --client-output-buffer-limit normal 0 0 0 slave 536870912 536870912 0 pubsub 33554432 8388608 60 --loglevel warning"
+    command:
+      - "redis-server"
+      - "--save"
+      - "''"
+      - "--repl-diskless-sync"
+      - "yes"
+      - "--repl-diskless-load"
+      - "swapdb"
+      - "--client-output-buffer-limit"
+      - "normal"
+      - "0"
+      - "0"
+      - "0"
+      - "slave"
+      - "536870912"
+      - "536870912"
+      - "0"
+      - "pubsub"
+      - "33554432"
+      - "8388608"
+      - "60"
+      - "--loglevel"
+      - "warning"
     ports:
       - "6379:6379"
     volumes:
