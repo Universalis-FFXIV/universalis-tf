@@ -1,0 +1,9 @@
+version: "2.4"
+services:
+  redis:
+    image: redis:7.0.0
+    # Save every 30 minutes
+    command: redis-server --port 6380 --save 300 1 --replicaof 127.0.0.1 6379 --loglevel warning
+    network_mode: "host"
+    volumes:
+      - "/home/universalis/db/data:/data:rw"
