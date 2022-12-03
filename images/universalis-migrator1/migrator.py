@@ -4,7 +4,7 @@ import uuid
 from cassandra.cluster import Cluster
 from cassandra.query import BatchStatement
 
-BATCH_SIZE = 100
+BATCH_SIZE = 1000
 
 logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 
