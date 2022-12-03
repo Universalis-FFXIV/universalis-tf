@@ -320,10 +320,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.30"
+          cpus: "0.50"
           memory: "1G"
         reservations:
-          cpus: "0.30"
+          cpus: "0.50"
           memory: "1G"
       placement:
         constraints:
@@ -336,10 +336,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "1G"
         reservations:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "1G"
       placement:
         constraints:
@@ -352,10 +352,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "1G"
         reservations:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "1G"
       placement:
         constraints:
