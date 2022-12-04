@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  node_exporter:
+    image: "quay.io/prometheus/node-exporter:latest"
+    command:
+      - "--path.rootfs=/host"
+    ports:
+      - "9100:9100"
+    volumes:
+      - "/:/host:ro,rslave"
+    deploy:
+      mode: "global"
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "64M"
+        reservations:
+          cpus: "0.05"
+          memory: "32M"
