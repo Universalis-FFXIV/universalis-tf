@@ -11,6 +11,13 @@ services:
       # Listen on port 443, default for HTTPS
       - 443:443
     deploy:
+      resources:
+        limits:
+          cpus: '1.50'
+          memory: 2G
+        reservations:
+          cpus: '1.50'
+          memory: 2G
       placement:
         constraints:
           # Make the traefik service run only on the node with this label

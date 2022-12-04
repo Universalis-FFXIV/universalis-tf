@@ -50,6 +50,9 @@ services:
         reservations:
           cpus: "0.30"
           memory: "1G"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
   mariadb:
     image: "mariadb:10.3.32"
     environment:
