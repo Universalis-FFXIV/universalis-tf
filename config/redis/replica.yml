@@ -21,7 +21,7 @@ services:
       - "/home/universalis/db/data:/data:rw"
   exporter:
     image: "oliver006/redis_exporter:v1.45.0"
-    ports:
-      - "9122:9121"
+    network_mode: "host"
     environment:
-      REDIS_ADDR: "redis://redis:6379"
+      REDIS_ADDR: "redis://localhost:6380"
+      REDIS_EXPORTER_WEB_LISTEN_ADDRESS: "0.0.0.0:9122"
