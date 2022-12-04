@@ -14,6 +14,14 @@ scrape_configs:
   static_configs:
   - targets:
     - "10.0.1.8:9180"
+- job_name: "Redis Master"
+  static_configs:
+  - targets:
+    - "65.108.107.235:9121"
+- job_name: "Redis Replica"
+  static_configs:
+  - targets:
+    - "65.108.107.235:9122"
 - job_name: "Universalis"
   dns_sd_configs:
   - names:

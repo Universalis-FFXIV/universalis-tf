@@ -30,3 +30,9 @@ services:
     volumes:
       - "/home/universalis/db/data:/data:ro"
     network_mode: "host"
+  exporter:
+    image: "oliver006/redis_exporter:v1.45.0"
+    ports:
+      - "9121:9121"
+    environment:
+      REDIS_ADDR: "redis://redis:6379"

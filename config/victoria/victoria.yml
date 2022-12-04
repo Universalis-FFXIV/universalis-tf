@@ -48,6 +48,7 @@ services:
     image: "grafana/grafana:8.5.15"
     environment:
       GF_SERVER_DOMAIN: "monitor.universalis.app"
+      GF_DEFAULT_FORCE_MIGRATION: "true"
     volumes:
       - "/mnt/metrics-db/grafana:/var/lib/grafana"
     networks:
