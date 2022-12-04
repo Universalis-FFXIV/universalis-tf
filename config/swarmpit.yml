@@ -44,7 +44,7 @@ services:
       resources:
         limits:
           cpus: '0.30'
-          memory: 512M
+          memory: 256M
         reservations:
           cpus: '0.15'
           memory: 256M
@@ -83,10 +83,10 @@ services:
       resources:
         limits:
           cpus: '0.10'
-          memory: 128M
+          memory: 32M
         reservations:
           cpus: '0.05'
-          memory: 128M
+          memory: 32M
 networks:
   net:
     driver: overlay
