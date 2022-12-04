@@ -13,10 +13,10 @@ services:
       resources:
         limits:
           cpus: "0.20"
-          memory: "64M"
+          memory: "32M"
         reservations:
           cpus: "0.20"
-          memory: "64M"
+          memory: "32M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -46,10 +46,10 @@ services:
       resources:
         limits:
           cpus: "0.30"
-          memory: "512M"
+          memory: "1G"
         reservations:
           cpus: "0.30"
-          memory: "512M"
+          memory: "1G"
   mariadb:
     image: "mariadb:10.3.32"
     environment:
@@ -288,11 +288,11 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "0.30"
-          memory: "32M"
+          cpus: "0.15"
+          memory: "16M"
         reservations:
-          cpus: "0.30"
-          memory: "32M"
+          cpus: "0.15"
+          memory: "16M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -305,10 +305,10 @@ services:
       resources:
         limits:
           cpus: "0.25"
-          memory: "512M"
+          memory: "256M"
         reservations:
           cpus: "0.25"
-          memory: "512M"
+          memory: "256M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -321,10 +321,10 @@ services:
       resources:
         limits:
           cpus: "0.50"
-          memory: "1G"
+          memory: "512M"
         reservations:
           cpus: "0.50"
-          memory: "1G"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -337,10 +337,10 @@ services:
       resources:
         limits:
           cpus: "0.50"
-          memory: "1G"
+          memory: "512M"
         reservations:
           cpus: "0.50"
-          memory: "1G"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -353,10 +353,10 @@ services:
       resources:
         limits:
           cpus: "0.50"
-          memory: "1G"
+          memory: "512M"
         reservations:
           cpus: "0.50"
-          memory: "1G"
+          memory: "512M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -400,42 +400,10 @@ services:
       resources:
         limits:
           cpus: "0.30"
-          memory: "512M"
+          memory: "256M"
         reservations:
           cpus: "0.30"
-          memory: "512M"
-      placement:
-        constraints:
-          - "node.labels.universalis.db-data == true"
-  postgres-s3sync:
-    image: "karashiiro/universalis-s3sync-postgres:latest"
-    environment:
-      AWS_SECRET_CSV: "/run/secrets/wasabi_swarm"
-      AWS_ENDPOINT: "https://s3.eu-west-1.wasabisys.com"
-      AWS_PROFILE: "swarm"
-      SYNC_SOURCE: "/dump"
-      SYNC_TARGET: "s3://universalis-postgres-backup"
-      REMOTE_POSTGRES_HOST: "postgres"
-      REMOTE_POSTGRES_DATABASE: "universalis"
-      REMOTE_POSTGRES_USER: "universalis"
-      REMOTE_POSTGRES_PASSWORD: "universalis"
-      DUMP_PATH: "/dump/universalis.dump"
-    secrets:
-      - "wasabi_swarm"
-    volumes:
-      - "/mnt/api-db/dump:/dump"
-    networks:
-      - "net"
-    depends_on:
-      - "postgres"
-    deploy:
-      replicas: 0
-      labels:
-        - "swarm.cronjob.enable=true"
-        - "swarm.cronjob.schedule=0 0 0 * * *"
-        - "swarm.cronjob.skip-running=false"
-      restart_policy:
-        condition: "none"
+          memory: "256M"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
