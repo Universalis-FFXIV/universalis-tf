@@ -11,6 +11,7 @@ services:
     networks:
       - "net"
       - "victoria"
+      - "traefik-public"
     deploy:
       resources:
         limits:
@@ -23,6 +24,18 @@ services:
         constraints:
           - "node.role == manager"
           - "node.labels.victoria.victoria-data == true"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.victoria-http.rule=Host(`victoria.universalis.app`)
+        - traefik.http.routers.victoria-http.entrypoints=http
+        - traefik.http.routers.victoria-http.middlewares=https-redirect
+        - traefik.http.routers.victoria-https.rule=Host(`victoria.universalis.app`)
+        - traefik.http.routers.victoria-https.entrypoints=https
+        - traefik.http.routers.victoria-https.tls=true
+        - traefik.http.routers.victoria-https.tls.certresolver=le
+        - traefik.http.services.victoria.loadbalancer.server.port=8428
   cadvisor:
     image: "gcr.io/cadvisor/cadvisor:v0.46.0"
     volumes:
