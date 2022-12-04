@@ -13,10 +13,10 @@ services:
       resources:
         limits:
           cpus: "0.20"
-          memory: "32M"
+          memory: "128M"
         reservations:
           cpus: "0.20"
-          memory: "32M"
+          memory: "128M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -114,6 +114,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
+      - "scylla-lb"
       - "rabbitmq"
       - "cache1"
       - "cache2"
@@ -146,6 +147,7 @@ services:
       disable: true
     depends_on:
       - "mariadb"
+      - "scylla-lb"
       - "rabbitmq"
       - "cache1"
       - "cache2"
@@ -175,6 +177,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
+      - "scylla-lb"
       - "rabbitmq"
       - "cache1"
       - "cache2"
@@ -204,6 +207,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
+      - "scylla-lb"
       - "rabbitmq"
       - "cache1"
       - "cache2"
@@ -233,6 +237,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
+      - "scylla-lb"
       - "rabbitmq"
       - "cache1"
       - "cache2"
@@ -262,6 +267,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
     depends_on:
       - "mariadb"
+      - "scylla-lb"
       - "rabbitmq"
       - "cache-staging1"
       - "cache-staging2"
@@ -272,10 +278,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.10"
+          cpus: "0.30"
           memory: "512M"
         reservations:
-          cpus: "0.10"
+          cpus: "0.30"
           memory: "512M"
       placement:
         constraints:
@@ -289,10 +295,10 @@ services:
       resources:
         limits:
           cpus: "0.15"
-          memory: "16M"
+          memory: "32M"
         reservations:
           cpus: "0.15"
-          memory: "16M"
+          memory: "32M"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
