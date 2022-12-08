@@ -289,22 +289,6 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
-  scylla-lb:
-    image: "karashiiro/universalis-scylla-nginx:latest"
-    networks:
-      - "net"
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          cpus: "0.15"
-          memory: "32M"
-        reservations:
-          cpus: "0.15"
-          memory: "32M"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   rabbitmq:
     image: "masstransit/rabbitmq:3.9.15"
     networks:
