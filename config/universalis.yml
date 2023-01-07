@@ -115,6 +115,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -146,6 +147,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
     healthcheck:
       disable: true
     depends_on:
@@ -178,6 +180,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -208,6 +211,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -238,6 +242,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -268,6 +273,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -379,6 +385,14 @@ services:
         reservations:
           cpus: "0.10"
           memory: "64M"
+  pgbouncer:
+    image: "edoburu/pgbouncer:1.17.0"
+    environment:
+      AUTH_TYPE: "plain"
+      DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
+      DEFAULT_POOL_SIZE: "400"
+      MAX_CLIENT_CONN: "3000"
+      MAX_DB_CONNECTIONS: "400"
   postgres:
     image: "postgres:14.3"
     command: "postgres -c max_connections=200"
@@ -392,11 +406,43 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.10"
-          memory: "64M"
+          cpus: "2.00"
+          memory: "6144M"
         reservations:
-          cpus: "0.10"
-          memory: "64M"
+          cpus: "2.00"
+          memory: "6144M"
+      placement:
+        constraints:
+          - "node.labels.universalis.db-data == true"
+  postgres-s3sync:
+    image: "karashiiro/universalis-s3sync-postgres:latest"
+    environment:
+      AWS_SECRET_CSV: "/run/secrets/wasabi_swarm"
+      AWS_ENDPOINT: "https://s3.eu-west-1.wasabisys.com"
+      AWS_PROFILE: "swarm"
+      SYNC_SOURCE: "/dump"
+      SYNC_TARGET: "s3://universalis-postgres-backup"
+      REMOTE_POSTGRES_HOST: "postgres"
+      REMOTE_POSTGRES_DATABASE: "universalis"
+      REMOTE_POSTGRES_USER: "universalis"
+      REMOTE_POSTGRES_PASSWORD: "universalis"
+      DUMP_PATH: "/dump/universalis.dump"
+    secrets:
+      - "wasabi_swarm"
+    volumes:
+      - "/mnt/api-db/dump:/dump"
+    networks:
+      - "net"
+    depends_on:
+      - "postgres"
+    deploy:
+      replicas: 0
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=0 0 0 * * *"
+        - "swarm.cronjob.skip-running=false"
+      restart_policy:
+        condition: "none"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
