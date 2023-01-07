@@ -393,6 +393,16 @@ services:
       DEFAULT_POOL_SIZE: "400"
       MAX_CLIENT_CONN: "3000"
       MAX_DB_CONNECTIONS: "400"
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "64M"
+        reservations:
+          cpus: "0.10"
+          memory: "64M"
   postgres:
     image: "postgres:14.3"
     command: "postgres -c max_connections=200"
