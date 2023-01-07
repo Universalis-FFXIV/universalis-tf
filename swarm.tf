@@ -71,6 +71,27 @@ resource "hcloud_firewall" "swarm_firewall" {
       "::/0"
     ]
   }
+
+  // HTTP/3
+  rule {
+    direction = "in"
+    protocol  = "udp"
+    port      = "80"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "udp"
+    port      = "443"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
 }
 
 # TODO: Add a bastion
