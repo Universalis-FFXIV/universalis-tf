@@ -1,17 +1,16 @@
 from diagrams import Cluster, Diagram
 from diagrams.aws.compute import Lambda
 from diagrams.aws.network import APIGateway
-from diagrams.custom import Custom
 from diagrams.generic.storage import Storage
 from diagrams.onprem.certificates import LetsEncrypt
 from diagrams.onprem.compute import Server
 from diagrams.onprem.container import Docker
-from diagrams.onprem.database import Postgresql, Mariadb
+from diagrams.onprem.database import Mariadb
 from diagrams.onprem.inmemory import Redis
 from diagrams.onprem.network import Nginx, Traefik
-from diagrams.programming.framework import React
+from diagrams.onprem.queue import RabbitMQ
 from diagrams.programming.language import Csharp
-from urllib.request import urlretrieve
+from third_party import Swarmpit, SwarmCronjob, Scylla, Cloudflare, Nextjs
 
 with Diagram("Universalis", show=False):
     with Cluster("Lodestone API"):
@@ -22,11 +21,10 @@ with Diagram("Universalis", show=False):
         lodestone_apig >> get_character  # type: ignore
 
     with Cluster("Universalis Redis (Dedicated Server)"):
-        universalis_redis = Redis("Stats & Point-in-time Data")
+        universalis_redis = Redis("Stats & Point-in-time Listings")
         universalis_redis - Redis("Replica")  # type: ignore
 
-    cloudflare_icon = "resources/cf.png"
-    cloudflare = Custom("DNS", cloudflare_icon)
+    cloudflare = Cloudflare("DNS")
 
     swarm = Docker("Docker Swarm")
     cloudflare >> lodestone_apig  # type: ignore
@@ -35,19 +33,9 @@ with Diagram("Universalis", show=False):
     with Cluster("Cluster Services"):
         with Cluster("Swarm Infra"):
             ingress = Traefik("Traefik")
-
-            swarmpit_url = "https://raw.githubusercontent.com/swarmpit/swarmpit/master/resources/public/img/icon.png"
-            swarmpit_icon = "resources/swarmpit.png"
-            urlretrieve(swarmpit_url, swarmpit_icon)
-            swarmpit = Custom("Swarmpit", swarmpit_icon)
-
-            swarm_cronjob_url = "https://crazymax.dev/swarm-cronjob/assets/logo.png"
-            swarm_cronjob_icon = "resources/swarm-cronjob.png"
-            urlretrieve(swarm_cronjob_url, swarm_cronjob_icon)
-            swarm_cronjob = Custom("swarm-cronjob", swarm_cronjob_icon)
-
+            swarmpit = Swarmpit("Swarmpit")
+            swarm_cronjob = SwarmCronjob("swarm-cronjob")
             ca = LetsEncrypt("CA")
-
             ingress >> ca  # type: ignore
             ingress >> swarmpit  # type: ignore
             swarm >> ingress  # type: ignore
@@ -57,11 +45,16 @@ with Diagram("Universalis", show=False):
 
             with Cluster("Universalis API"):
                 universalis_api = Csharp("API")
-                universalis_db = Postgresql("API Database")
+
+                universalis_mq = RabbitMQ("WebSocket Events")
+
+                with Cluster("Market Board Sales"):
+                    universalis_db = Scylla("ScyllaDB")
 
                 with Cluster("Distributed Cache"):
                     universalis_cache = Redis("Redis")
 
+                universalis_api >> universalis_mq  # type: ignore
                 universalis_api >> universalis_redis  # type: ignore
                 universalis_api >> universalis_db  # type: ignore
                 universalis_api >> universalis_cache  # type: ignore
@@ -70,12 +63,12 @@ with Diagram("Universalis", show=False):
                 ingress >> universalis_router  # type: ignore
 
             with Cluster("Mogboard"):
-                mogboard_website = React("Website")
+                mogboard_website = Nextjs("Website")
                 mogboard_db = Mariadb("Website Database")
                 universalis_router >> mogboard_website >> mogboard_db  # type: ignore
 
         with Cluster("Universalis Documentation"):
-            ingress >> React("docs.universalis.app")  # type: ignore
+            ingress >> Nextjs("docs.universalis.app")  # type: ignore
 
         with Cluster("ACT Plugin Resources"):
             ingress >> Nginx("act.universalis.app") >> Storage("version\ndefinitions.json")  # type: ignore
