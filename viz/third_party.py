@@ -31,3 +31,10 @@ class Swarmpit(Custom):
         swarmpit_icon = "resources/swarmpit.png"
         urlretrieve(swarmpit_url, swarmpit_icon)
         super().__init__(label, swarmpit_icon)
+
+class Victoria(Custom):
+    def __init__(self, label):
+        victoria_url = "https://avatars.githubusercontent.com/u/43720803?s=200&v=4"
+        victoria_icon = "resources/victoria.png"
+        urlretrieve(victoria_url, victoria_icon)
+        super().__init__(label, victoria_icon)

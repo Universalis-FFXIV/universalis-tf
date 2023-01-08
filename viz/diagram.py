@@ -7,10 +7,11 @@ from diagrams.onprem.compute import Server
 from diagrams.onprem.container import Docker
 from diagrams.onprem.database import Mariadb
 from diagrams.onprem.inmemory import Redis
+from diagrams.onprem.monitoring import Grafana
 from diagrams.onprem.network import Nginx, Traefik
 from diagrams.onprem.queue import RabbitMQ
 from diagrams.programming.language import Csharp
-from third_party import Swarmpit, SwarmCronjob, Scylla, Cloudflare, Nextjs
+from third_party import Swarmpit, SwarmCronjob, Scylla, Cloudflare, Nextjs, Victoria
 
 with Diagram("Universalis", show=False):
     with Cluster("Lodestone API"):
@@ -33,12 +34,19 @@ with Diagram("Universalis", show=False):
     with Cluster("Cluster Services"):
         with Cluster("Swarm Infra"):
             ingress = Traefik("Traefik")
-            swarmpit = Swarmpit("Swarmpit")
             swarm_cronjob = SwarmCronjob("swarm-cronjob")
             ca = LetsEncrypt("CA")
             ingress >> ca  # type: ignore
-            ingress >> swarmpit  # type: ignore
             swarm >> ingress  # type: ignore
+        
+        with Cluster("Monitoring Stack"):
+            grafana = Grafana("Grafana")
+            victoria = Victoria("Victoria")
+            
+            swarmpit = Swarmpit("Swarmpit")
+
+            ingress >> grafana >> victoria  # type: ignore
+            ingress >> swarmpit  # type: ignore
 
         with Cluster("Universalis"):
             universalis_router = Nginx("universalis.app")
