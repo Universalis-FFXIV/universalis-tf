@@ -287,10 +287,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.30"
+          cpus: "0.50"
           memory: "512M"
         reservations:
-          cpus: "0.30"
+          cpus: "0.50"
           memory: "512M"
       placement:
         constraints:
@@ -393,7 +393,6 @@ services:
       DEFAULT_POOL_SIZE: "400"
       MAX_CLIENT_CONN: "3000"
       MAX_DB_CONNECTIONS: "400"
-      POOL_MODE: "transaction"
     networks:
       - "net"
     deploy:
