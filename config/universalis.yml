@@ -108,7 +108,7 @@ services:
         constraints:
           - "node.labels.mogboard.db-data == true"
   universalis:
-    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.15"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -139,7 +139,7 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.15"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
@@ -173,7 +173,7 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-extra:
-    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.15"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -204,7 +204,7 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-history:
-    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.15"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -235,7 +235,7 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-upload:
-    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.15"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -393,6 +393,7 @@ services:
       DEFAULT_POOL_SIZE: "400"
       MAX_CLIENT_CONN: "3000"
       MAX_DB_CONNECTIONS: "400"
+      POOL_MODE: "transaction"
     networks:
       - "net"
     deploy:
