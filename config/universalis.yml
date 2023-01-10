@@ -447,16 +447,16 @@ services:
       DEFAULT_POOL_SIZE: "400"
       MAX_CLIENT_CONN: "3000"
       MAX_DB_CONNECTIONS: "400"
-      POOL_MODE: "transaction"
+      POOL_MODE: "session"
     networks:
       - "net"
     deploy:
       resources:
         limits:
-          cpus: "0.10"
+          cpus: "0.20"
           memory: "64M"
         reservations:
-          cpus: "0.10"
+          cpus: "0.20"
           memory: "64M"
   postgres:
     image: "postgres:14.3"
