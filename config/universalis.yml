@@ -138,6 +138,37 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
+  universalis-canary:
+    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    environment:
+      ASPNETCORE_URLS: "http://+:4002"
+      UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
+      UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+    depends_on:
+      - "mariadb"
+      - "scylla-lb"
+      - "rabbitmq"
+      - "cache1"
+      - "cache2"
+      - "cache3"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: "1G"
+        reservations:
+          cpus: "2.00"
+          memory: "1G"
+      placement:
+        constraints:
+          - "node.labels.cluster.critical != true"
   universalis-websocket:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.42.18"
     environment:
