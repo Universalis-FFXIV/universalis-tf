@@ -4,6 +4,10 @@ services:
     image: "karashiiro/universalis-nginx:latest"
     depends_on:
       - "universalis"
+      - "universalis-websocket"
+      - "universalis-extra"
+      - "universalis-history"
+      - "universalis-upload"
       - "universalis-staging"
     networks:
       - "net"
@@ -24,13 +28,6 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.universalis-http.rule=Host(`universalis.app`, `staging.universalis.app`)
-        - traefik.http.routers.universalis-http.entrypoints=http
-        - traefik.http.routers.universalis-http.middlewares=https-redirect
-        - traefik.http.routers.universalis-https.rule=Host(`universalis.app`, `staging.universalis.app`)
-        - traefik.http.routers.universalis-https.entrypoints=https
-        - traefik.http.routers.universalis-https.tls=true
-        - traefik.http.routers.universalis-https.tls.certresolver=le
         - traefik.http.services.universalis.loadbalancer.server.port=80
   nginx-canary:
     image: "karashiiro/universalis-nginx-canary:latest"
@@ -53,6 +50,11 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.services.universalis_canary.loadbalancer.server.port=80
   mogboard:
     image: "ghcr.io/universalis-ffxiv/mogboard-next:latest"
     env_file:

@@ -1,0 +1,26 @@
+http:
+  routers:
+    universalis-http:
+      service: universalis_weighted
+      entrypoints: [http]
+      middlewares: [https-redirect]
+      rule: Host(`universalis.app`, `staging.universalis.app`)
+    universalis-https:
+      service: universalis_weighted
+      entrypoints: [https]
+      tls:
+        certresolver: le
+      rule: Host(`universalis.app`, `staging.universalis.app`)
+  services:
+    universalis_weighted:
+      weighted:
+        services:
+          - name: universalis@docker
+            weight: 100
+          - name: universalis_canary@docker
+            weight: 0
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+        permanent: true
