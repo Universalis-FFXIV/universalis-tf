@@ -16,9 +16,9 @@ http:
       weighted:
         services:
           - name: universalis@docker
-            weight: 95
+            weight: 90
           - name: universalis_canary@docker
-            weight: 5
+            weight: 10
   middlewares:
     https-redirect:
       redirectScheme:
