@@ -267,6 +267,8 @@ services:
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -368,7 +370,7 @@ services:
           - "node.labels.cluster.critical != true"
   cache1:
     image: "redis:7.0.0"
-    command: "redis-server --save \"\" --loglevel warning"
+    command: 'redis-server --save "" --loglevel warning'
     networks:
       - "net"
     deploy:
@@ -384,7 +386,7 @@ services:
           - "node.labels.cluster.critical != true"
   cache2:
     image: "redis:7.0.0"
-    command: "redis-server --save \"\" --replicaof cache1 6379 --loglevel warning"
+    command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
     networks:
       - "net"
     deploy:
@@ -400,7 +402,7 @@ services:
           - "node.labels.cluster.critical != true"
   cache3:
     image: "redis:7.0.0"
-    command: "redis-server --save \"\" --replicaof cache1 6379 --loglevel warning"
+    command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
     networks:
       - "net"
     deploy:
@@ -416,7 +418,7 @@ services:
           - "node.labels.cluster.critical != true"
   cache-staging1:
     image: "redis:7.0.0"
-    command: "redis-server --save \"\" --loglevel warning"
+    command: 'redis-server --save "" --loglevel warning'
     networks:
       - "net"
     deploy:
@@ -429,7 +431,7 @@ services:
           memory: "64M"
   cache-staging2:
     image: "redis:7.0.0"
-    command: "redis-server --save \"\" --replicaof cache-staging1 6379 --loglevel warning"
+    command: 'redis-server --save "" --replicaof cache-staging1 6379 --loglevel warning'
     networks:
       - "net"
     deploy:
