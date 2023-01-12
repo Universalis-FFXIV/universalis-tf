@@ -33,6 +33,7 @@ services:
     image: "karashiiro/universalis-nginx-canary:latest"
     depends_on:
       - "universalis"
+      - "universalis-history"
       - "universalis-staging"
       - "universalis-canary"
     networks:
@@ -131,14 +132,14 @@ services:
         constraints:
           - "node.labels.mogboard.db-data == true"
   universalis:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.18"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.21"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -150,7 +151,7 @@ services:
       - "net"
       - "victoria"
     deploy:
-      replicas: 8
+      replicas: 5
       resources:
         limits:
           cpus: "2.00"
@@ -169,7 +170,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -193,7 +194,7 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.18"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.21"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
@@ -201,7 +202,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
     healthcheck:
       disable: true
     depends_on:
@@ -227,14 +228,14 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-extra:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.18"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.21"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -258,14 +259,14 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-history:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.18"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.21"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -289,14 +290,14 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-upload:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.18"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.21"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -327,7 +328,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=100"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -444,7 +445,7 @@ services:
     environment:
       AUTH_TYPE: "plain"
       DATABASE_URL: "postgres://universalis:universalis@postgres/universalis"
-      DEFAULT_POOL_SIZE: "400"
+      DEFAULT_POOL_SIZE: "180"
       MAX_CLIENT_CONN: "3000"
       MAX_DB_CONNECTIONS: "400"
       POOL_MODE: "session"
@@ -460,7 +461,8 @@ services:
           memory: "64M"
   postgres:
     image: "postgres:14.3"
-    command: "postgres -c max_connections=200"
+    # TODO: Mount a config file
+    command: "postgres -c shared_preload_libraries=pg_stat_statements -c max_connections=200 -c shared_buffers=1536MB -c effective_cache_size=4608MB -c maintenance_work_mem=384MB -c checkpoint_completion_target=0.9 -c wal_buffers=16MB -c default_statistics_target=100 -c random_page_cost=1.1 -c effective_io_concurrency=200 -c work_mem=3932kB -c min_wal_size=1GB -c max_wal_size=4GB"
     environment:
       POSTGRES_USER: "universalis"
       POSTGRES_PASSWORD: "universalis"
@@ -471,10 +473,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2.00"
+          cpus: "3.00"
           memory: "6144M"
         reservations:
-          cpus: "2.00"
+          cpus: "3.00"
           memory: "6144M"
       placement:
         constraints:
