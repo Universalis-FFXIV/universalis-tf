@@ -1,0 +1,126 @@
+version: "3.9"
+services:
+  aalert:
+    image: prom/alertmanager:v0.25.0
+    networks:
+      - scylla-monitoring-stack
+    volumes:
+    - /scylla-monitoring-stack/prometheus/rule_config.yml:/etc/alertmanager/config.yml
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "64M"
+        reservations:
+          cpus: "0.10"
+          memory: "64M"
+      placement:
+        constraints:
+          - "node.labels.scylla-monitoring-stack.data == true"
+  agraf:
+    image: grafana/grafana:9.1.0
+    environment:
+      GF_SERVER_DOMAIN: scylla.universalis.app
+      GF_PANELS_DISABLE_SANITIZE_HTML: "true"
+      GF_PATHS_PROVISIONING: /var/lib/grafana/provisioning
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: scylladb-scylla-datasource
+    networks:
+      - scylla-monitoring-stack
+      - traefik-public
+    volumes:
+    - /scylla-monitoring-stack/grafana/build:/var/lib/grafana/dashboards
+    - /scylla-monitoring-stack/grafana/plugins:/var/lib/grafana/plugins
+    - /scylla-monitoring-stack/grafana/provisioning:/var/lib/grafana/provisioning
+    - /scylla-monitoring-stack/grafana/data:/var/lib/grafana
+    user: "0:0"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "128M"
+        reservations:
+          cpus: "0.15"
+          memory: "64M"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.grafana-scylla-http.rule=Host(`scylla.universalis.app`)
+        - traefik.http.routers.grafana-scylla-http.entrypoints=http
+        - traefik.http.routers.grafana-scylla-http.middlewares=https-redirect
+        - traefik.http.routers.grafana-scylla-https.rule=Host(`scylla.universalis.app`)
+        - traefik.http.routers.grafana-scylla-https.entrypoints=https
+        - traefik.http.routers.grafana-scylla-https.tls=true
+        - traefik.http.routers.grafana-scylla-https.tls.certresolver=le
+        - traefik.http.services.grafana-scylla.loadbalancer.server.port=3000
+      placement:
+        constraints:
+          - "node.labels.scylla-monitoring-stack.data == true"
+  loki:
+    image: grafana/loki:2.7.1
+    command:
+    - --config.file=/mnt/config/loki-config.yaml
+    networks:
+      - scylla-monitoring-stack
+    volumes:
+    - /scylla-monitoring-stack/loki/rules:/etc/loki/rules
+    - /scylla-monitoring-stack/loki/conf:/mnt/config
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.scylla-monitoring-stack.data == true"
+  aprom:
+    image: prom/prometheus:v2.38.0
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - scylla-monitoring-stack
+    volumes:
+    - /scylla-monitoring-stack/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    - /scylla-monitoring-stack/prometheus/prom_rules/prometheus.rules.yml:/etc/prometheus/prom_rules/prometheus.rules.yml
+    - /scylla-monitoring-stack/prometheus/scylla_servers.yml:/etc/scylla.d/prometheus/scylla_servers.yml
+    - /scylla-monitoring-stack/prometheus/scylla_servers.yml:/etc/scylla.d/prometheus/node_exporter_servers.yml
+    - /scylla-monitoring-stack/prometheus/data:/prometheus/data
+    user: "0:0"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: "2048M"
+        reservations:
+          cpus: "2.00"
+          memory: "2048M"
+      placement:
+        constraints:
+          - "node.labels.scylla-monitoring-stack.data == true"
+  promtail:
+    image: grafana/promtail:2.7.1
+    command:
+    - --config.file=/etc/promtail/config.yml
+    networks:
+      - scylla-monitoring-stack
+    volumes:
+    - /scylla-monitoring-stack/loki/promtail/promtail_config.compose.yml:/etc/promtail/config.yml
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.scylla-monitoring-stack.data == true"
+networks:
+  scylla-monitoring-stack:
+    external: true
+  traefik-public:
+    external: true
