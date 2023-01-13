@@ -117,6 +117,11 @@ resource "hcloud_server" "swarm_manager_1" {
     ip         = "10.0.1.1"
   }
 
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
   depends_on = [
     hcloud_network_subnet.subnet
   ]
@@ -137,6 +142,11 @@ resource "hcloud_server" "swarm_manager_2" {
     ip         = "10.0.1.2"
   }
 
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
   depends_on = [
     hcloud_network_subnet.subnet
   ]
@@ -155,6 +165,11 @@ resource "hcloud_server" "swarm_manager_3" {
   network {
     network_id = hcloud_network.network.id
     ip         = "10.0.1.3"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
   }
 
   depends_on = [
@@ -192,6 +207,11 @@ resource "hcloud_server" "swarm_worker_1" {
     ip         = "10.0.1.4"
   }
 
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
   depends_on = [
     hcloud_network_subnet.subnet
   ]
@@ -213,6 +233,11 @@ resource "hcloud_server" "swarm_worker_2" {
     ip         = "10.0.1.5"
   }
 
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
   depends_on = [
     hcloud_network_subnet.subnet
   ]
@@ -231,6 +256,11 @@ resource "hcloud_server" "swarm_worker_3" {
   network {
     network_id = hcloud_network.network.id
     ip         = "10.0.1.6"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
   }
 
   depends_on = [
@@ -259,10 +289,16 @@ resource "hcloud_server" "scylla_1" {
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
   delete_protection  = true
   rebuild_protection = true
+  backups            = true
 
   network {
     network_id = hcloud_network.network.id
     ip         = "10.0.1.7"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
   }
 
   depends_on = [
@@ -279,10 +315,42 @@ resource "hcloud_server" "scylla_2" {
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
   delete_protection  = true
   rebuild_protection = true
+  backups            = true
 
   network {
     network_id = hcloud_network.network.id
     ip         = "10.0.1.8"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+resource "hcloud_server" "scylla_3" {
+  name               = "scylla-3"
+  server_type        = "cpx31"
+  image              = "docker-ce"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+  backups            = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.9"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
   }
 
   depends_on = [
@@ -296,6 +364,10 @@ output "scylla_1_ip" {
 
 output "scylla_2_ip" {
   value = hcloud_server.scylla_2.ipv4_address
+}
+
+output "scylla_3_ip" {
+  value = hcloud_server.scylla_3.ipv4_address
 }
 
 # Volumes for the website and API databases
@@ -331,6 +403,14 @@ resource "hcloud_volume" "api_db_2" {
   delete_protection = true
 }
 
+resource "hcloud_volume" "api_db_3" {
+  name              = "api-db-3"
+  location          = "hel1"
+  size              = 120
+  format            = "xfs"
+  delete_protection = true
+}
+
 resource "hcloud_volume" "metrics_db" {
   name              = "metrics-db"
   location          = "hel1"
@@ -360,6 +440,12 @@ resource "hcloud_volume_attachment" "api_db_1_ref" {
 resource "hcloud_volume_attachment" "api_db_2_ref" {
   volume_id = hcloud_volume.api_db_2.id
   server_id = hcloud_server.scylla_2.id
+  automount = true
+}
+
+resource "hcloud_volume_attachment" "api_db_3_ref" {
+  volume_id = hcloud_volume.api_db_3.id
+  server_id = hcloud_server.scylla_3.id
   automount = true
 }
 
@@ -445,6 +531,7 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_worker_2.id,
     hcloud_server.swarm_worker_3.id,
     hcloud_server.scylla_1.id,
-    hcloud_server.scylla_2.id
+    hcloud_server.scylla_2.id,
+    hcloud_server.scylla_3.id
   ]
 }
