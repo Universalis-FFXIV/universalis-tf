@@ -485,6 +485,13 @@ services:
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
+  postgres-exporter:
+    image: "quay.io/prometheuscommunity/postgres-exporter:v0.11.0"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://universalis:universalis@postgres:5432/universalis?sslmode=disable"
+    networks:
+      - "universalis"
+      - "victoria"
   postgres-dummy:
     image: "postgres:14.3"
     environment:
