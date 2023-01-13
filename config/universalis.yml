@@ -10,7 +10,7 @@ services:
       - "universalis-upload"
       - "universalis-staging"
     networks:
-      - "net"
+      - "universalis"
       - "traefik-public"
     deploy:
       replicas: 3
@@ -37,7 +37,7 @@ services:
       - "universalis-staging"
       - "universalis-canary"
     networks:
-      - "net"
+      - "universalis"
       - "traefik-public"
     deploy:
       replicas: 2
@@ -63,7 +63,7 @@ services:
     depends_on:
       - "mariadb"
     networks:
-      - "net"
+      - "universalis"
       - "traefik-public"
     deploy:
       replicas: 3
@@ -87,7 +87,7 @@ services:
     volumes:
       - "/mnt/website-db/mysql:/var/lib/mysql"
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -117,7 +117,7 @@ services:
     volumes:
       - "/mnt/website-db/dump:/dump"
     networks:
-      - "net"
+      - "universalis"
     depends_on:
       - "mariadb"
     deploy:
@@ -138,8 +138,10 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -148,7 +150,7 @@ services:
       - "cache2"
       - "cache3"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 5
@@ -169,8 +171,10 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -179,7 +183,7 @@ services:
       - "cache2"
       - "cache3"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 1
@@ -201,8 +205,8 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
     healthcheck:
       disable: true
     depends_on:
@@ -213,7 +217,7 @@ services:
       - "cache2"
       - "cache3"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 2
@@ -234,8 +238,10 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -244,7 +250,7 @@ services:
       - "cache2"
       - "cache3"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 3
@@ -265,8 +271,8 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
     healthcheck:
       disable: true
     depends_on:
@@ -277,7 +283,7 @@ services:
       - "cache2"
       - "cache3"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 2
@@ -298,8 +304,10 @@ services:
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -308,7 +316,7 @@ services:
       - "cache2"
       - "cache3"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 3
@@ -323,14 +331,16 @@ services:
         constraints:
           - "node.labels.cluster.critical != true"
   universalis-staging:
-    image: "ghcr.io/universalis-ffxiv/universalis:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis-staging:v2"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
-      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8"
+      UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+    healthcheck:
+      disable: true
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -338,7 +348,7 @@ services:
       - "cache-staging1"
       - "cache-staging2"
     networks:
-      - "net"
+      - "universalis"
       - "victoria"
     deploy:
       replicas: 2
@@ -355,7 +365,7 @@ services:
   rabbitmq:
     image: "masstransit/rabbitmq:3.9.15"
     networks:
-      - "net"
+      - "universalis"
     deploy:
       replicas: 1
       resources:
@@ -372,7 +382,7 @@ services:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --loglevel warning'
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -388,7 +398,7 @@ services:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -404,7 +414,7 @@ services:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -420,7 +430,7 @@ services:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --loglevel warning'
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -433,7 +443,7 @@ services:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --replicaof cache-staging1 6379 --loglevel warning'
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -452,7 +462,7 @@ services:
       MAX_DB_CONNECTIONS: "400"
       POOL_MODE: "session"
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -471,7 +481,7 @@ services:
     volumes:
       - "/mnt/api-db/data:/var/lib/postgresql/data"
     networks:
-      - "net"
+      - "universalis"
     deploy:
       resources:
         limits:
@@ -483,6 +493,21 @@ services:
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
+  postgres-dummy:
+    image: "postgres:14.3"
+    environment:
+      POSTGRES_USER: "universalis"
+      POSTGRES_PASSWORD: "universalis"
+    networks:
+      - "universalis"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "512M"
   postgres-s3sync:
     image: "karashiiro/universalis-s3sync-postgres:latest"
     environment:
@@ -501,7 +526,7 @@ services:
     volumes:
       - "/mnt/api-db/dump:/dump"
     networks:
-      - "net"
+      - "universalis"
     depends_on:
       - "postgres"
     deploy:
@@ -516,12 +541,8 @@ services:
         constraints:
           - "node.labels.universalis.db-data == true"
 networks:
-  net:
-    driver: "overlay"
-    attachable: true
-    driver_opts:
-      # Hetzner networks have an MTU of 1400
-      com.docker.network.driver.mtu: 1400
+  universalis:
+    external: true
   traefik-public:
     external: true
   victoria:
