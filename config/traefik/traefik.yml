@@ -13,11 +13,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.50'
-          memory: 2G
+          cpus: '3.00'
+          memory: 5G
         reservations:
-          cpus: '1.50'
-          memory: 2G
+          cpus: '3.00'
+          memory: 5G
       placement:
         constraints:
           # Make the traefik service run only on the node with this label

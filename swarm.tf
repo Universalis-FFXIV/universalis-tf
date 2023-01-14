@@ -104,7 +104,7 @@ resource "hcloud_ssh_key" "swarm_ssh" {
 # Provision the manager nodes
 resource "hcloud_server" "swarm_manager_1" {
   name               = "swarm-manager-1"
-  server_type        = "cpx21"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
