@@ -3,8 +3,8 @@ version: '3.3'
 services:
 
   traefik:
-    # Use the latest v2.2.x Traefik image available
-    image: traefik:v2.2
+    # Use the latest v3.0.x Traefik image available
+    image: traefik:v3.0
     ports:
       # Listen on port 80, default for HTTP, necessary to redirect to HTTPS
       - 80:80
@@ -88,6 +88,12 @@ services:
       - --log
       # Enable Prometheus metrics
       - --metrics.prometheus=true
+      # Enable tracing
+      - --tracing.serviceName=traefik
+      - --tracing.openTelemetry=true
+      - --tracing.openTelemetry.address=otel-collector:4317
+      - --tracing.openTelemetry.grpc=true
+      - --tracing.openTelemetry.insecure=true
       # Enable the Dashboard and API
       - --api
     networks:

@@ -4,13 +4,13 @@ http:
       service: universalis_weighted
       entrypoints: [http]
       middlewares: [https-redirect]
-      rule: Host(`universalis.app`, `staging.universalis.app`)
+      rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
     universalis-https:
       service: universalis_weighted
       entrypoints: [https]
       tls:
         certresolver: le
-      rule: Host(`universalis.app`, `staging.universalis.app`)
+      rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
   services:
     universalis_weighted:
       weighted:
