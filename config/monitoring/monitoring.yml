@@ -65,14 +65,15 @@ services:
       - "/monitoring/tempo/data/:/tmp/tempo:rw"
     networks:
       - "net"
+      - "victoria"
     deploy:
       resources:
         limits:
-          cpus: "0.50"
-          memory: "1G"
+          cpus: "1.00"
+          memory: "2G"
         reservations:
-          cpus: "0.50"
-          memory: "1G"
+          cpus: "1.00"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.monitoring.data == true"
