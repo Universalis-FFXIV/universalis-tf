@@ -102,6 +102,7 @@ services:
       GF_DEFAULT_FORCE_MIGRATION: "true"
     volumes:
       - "/mnt/metrics-db/grafana:/var/lib/grafana"
+      - "/mnt/metrics-db/grafana-config/grafana.ini:/etc/grafana/grafana.ini"
     networks:
       - "net"
       - "traefik-public"
