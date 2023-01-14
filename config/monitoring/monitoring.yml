@@ -57,8 +57,46 @@ services:
         reservations:
           cpus: "0.10"
           memory: "128M"
+  tempo:
+    image: "grafana/tempo:latest"
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - "/monitoring/tempo/tempo.yaml:/etc/tempo.yaml:ro"
+      - "/monitoring/tempo/data/:/tmp/tempo:rw"
+    networks:
+      - "net"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.monitoring.data == true"
+  otel-collector:
+    image: "otel/opentelemetry-collector:0.69.0"
+    command: [ "--config=/etc/otel-collector.yaml" ]
+    volumes:
+      - "/monitoring/otel/otel-collector.yaml:/etc/otel-collector.yaml:ro"
+    networks:
+      - "net"
+      - "victoria"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "512M"
+        reservations:
+          cpus: "0.20"
+          memory: "512M"
+      placement:
+        constraints:
+          - "node.labels.monitoring.data == true"
   grafana:
-    image: "grafana/grafana:8.5.15"
+    image: "grafana/grafana:9.1.0"
     environment:
       GF_SERVER_DOMAIN: "monitor.universalis.app"
       GF_DEFAULT_FORCE_MIGRATION: "true"
