@@ -24,7 +24,6 @@ services:
         - traefik.http.routers.universalis-docs-https.rule=Host(`docs.universalis.app`)
         - traefik.http.routers.universalis-docs-https.entrypoints=https
         - traefik.http.routers.universalis-docs-https.tls=true
-        - traefik.http.routers.universalis-docs-https.tls.certresolver=le
         - traefik.http.services.universalis-docs.loadbalancer.server.port=3000
 networks:
   net:

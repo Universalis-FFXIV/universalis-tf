@@ -51,7 +51,6 @@ services:
         - traefik.http.routers.grafana-scylla-https.rule=Host(`scylla.universalis.app`)
         - traefik.http.routers.grafana-scylla-https.entrypoints=https
         - traefik.http.routers.grafana-scylla-https.tls=true
-        - traefik.http.routers.grafana-scylla-https.tls.certresolver=le
         - traefik.http.services.grafana-scylla.loadbalancer.server.port=3000
       placement:
         constraints:

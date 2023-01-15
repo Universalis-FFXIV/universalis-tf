@@ -87,7 +87,6 @@ services:
         - traefik.http.routers.mogboard-https.rule=(Host(`universalis.app`) || Host(`staging.universalis.app`)) && (PathPrefix(`/market`) || PathPrefix(`/account`) || PathPrefix(`/_next`) || Path(`/about`) || Path(`/contribute`) || Path(`/`))
         - traefik.http.routers.mogboard-https.entrypoints=https
         - traefik.http.routers.mogboard-https.tls=true
-        - traefik.http.routers.mogboard-https.tls.certresolver=le
         - traefik.http.services.mogboard.loadbalancer.server.port=3000
   mariadb:
     image: "mariadb:10.3.32"
@@ -151,7 +150,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
@@ -187,7 +186,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
@@ -224,7 +223,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
@@ -255,7 +254,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
@@ -286,7 +285,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
@@ -317,7 +316,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379,cache3:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
@@ -332,13 +331,13 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 2
+      replicas: 3
       resources:
         limits:
-          cpus: "1.00"
+          cpus: "1.50"
           memory: "1G"
         reservations:
-          cpus: "1.00"
+          cpus: "1.50"
           memory: "1G"
       placement:
         constraints:
@@ -351,7 +350,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=pgbouncer;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true

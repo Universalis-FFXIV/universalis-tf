@@ -34,7 +34,6 @@ services:
         - traefik.http.routers.victoria-https.rule=Host(`victoria.universalis.app`)
         - traefik.http.routers.victoria-https.entrypoints=https
         - traefik.http.routers.victoria-https.tls=true
-        - traefik.http.routers.victoria-https.tls.certresolver=le
         - traefik.http.services.victoria.loadbalancer.server.port=8428
   cadvisor:
     image: "gcr.io/cadvisor/cadvisor:v0.46.0"
@@ -125,7 +124,6 @@ services:
         - traefik.http.routers.grafana-https.rule=Host(`monitor.universalis.app`)
         - traefik.http.routers.grafana-https.entrypoints=https
         - traefik.http.routers.grafana-https.tls=true
-        - traefik.http.routers.grafana-https.tls.certresolver=le
         - traefik.http.services.grafana.loadbalancer.server.port=3000
       placement:
         constraints:

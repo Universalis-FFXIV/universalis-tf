@@ -8,8 +8,7 @@ http:
     universalis-https:
       service: universalis_weighted
       entrypoints: [https]
-      tls:
-        certresolver: le
+      tls: {}
       rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
   services:
     universalis_weighted:
@@ -27,3 +26,7 @@ http:
 serversTransport:
   forwardingTimeouts:
     responseHeaderTimeout: 5s
+tls:
+  certificates:
+    - certFile: /mnt/certificates/universalis.app.cert
+      keyFile: /mnt/certificates/universalis.app.key
