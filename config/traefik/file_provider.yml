@@ -10,6 +10,18 @@ http:
       entrypoints: [https]
       tls: {}
       rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
+    universalis-listings-https:
+      service: universalis@docker
+      entrypoints: [https]
+      middlewares: [api-cache]
+      tls: {}
+      rule: (Host(`universalis.app`) || Host(`staging.universalis.app`)) && Path(`/api/{path:(Aether|Crystal|Dynamis|Primal|Chaos|Light|Materia|Elemental|Gaia|Mana|Meteor)/\d+}`)
+    universalis-stats-https:
+      service: universalis@docker
+      entrypoints: [https]
+      middlewares: [api-cache]
+      tls: {}
+      rule: (Host(`universalis.app`) || Host(`staging.universalis.app`)) && PathPrefix(`/api/{path:(v2/)?(extra|tax-rates)}`)
     universalis-gamedata-https:
       service: universalis@docker
       entrypoints: [https]
