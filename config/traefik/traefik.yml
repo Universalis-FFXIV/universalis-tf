@@ -88,11 +88,6 @@ services:
       - --log
       # Enable Prometheus metrics
       - --metrics.prometheus=true
-      # Enable tracing
-      - --tracing.jaeger=true
-      - --tracing.jaeger.samplingType=probabilistic
-      - --tracing.jaeger.samplingParam=0.95
-      - --tracing.jaeger.collector.endpoint=http://tempo:14268/api/traces?format=jaeger.thrift
       # Enable the Dashboard and API
       - --api
     networks:
