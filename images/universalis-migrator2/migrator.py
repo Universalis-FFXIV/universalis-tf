@@ -11,14 +11,14 @@ logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 logging.info("Starting data migration script.")
 
 logging.info("Requesting worlds.")
-worlds_res = requests.get("https://universalis.app/api/v3/game/worlds")
+worlds_res = requests.get("http://universalis-extra:4002/api/v3/game/worlds")
 if not worlds_res.ok:
     logging.error("Failed to get worlds from API.")
     exit(1)
 worlds = list(map(lambda w: w["id"], json.loads(worlds_res.text)))
 
 logging.info("Requesting marketable items.")
-marketable_res = requests.get("https://universalis.app/api/marketable")
+marketable_res = requests.get("http://universalis-extra:4002/api/marketable")
 if not marketable_res.ok:
     logging.error("Failed to get marketable items from API.")
     exit(1)
