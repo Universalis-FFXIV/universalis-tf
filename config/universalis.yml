@@ -158,10 +158,10 @@ services:
       resources:
         limits:
           cpus: "2.00"
-          memory: "1G"
+          memory: "2G"
         reservations:
           cpus: "2.00"
-          memory: "1G"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
@@ -192,10 +192,10 @@ services:
       resources:
         limits:
           cpus: "2.00"
-          memory: "1G"
+          memory: "2G"
         reservations:
           cpus: "2.00"
-          memory: "1G"
+          memory: "2G"
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
