@@ -36,11 +36,18 @@ with psycopg2.connect("host=postgres dbname=universalis user=universalis passwor
 
         for world_id in worlds:
             for item_id in marketable:
-                market_item = scylla_session.execute("SELECT last_upload_time FROM market_item WHERE item_id = %s AND world_id = %s", (item_id, world_id)).one()
+                fetched_data = False
+                while not fetched_data:
+                    try:
+                        market_item = scylla_session.execute("SELECT last_upload_time FROM market_item WHERE item_id = %s AND world_id = %s", (item_id, world_id)).one()
+                        fetched_data = True
+                    except Exception as exc:
+                        logging.error(exc)
+                        continue
 
-                # The data in Scylla is outdated compared to the data in
-                # Postgres, so ignore anything already in Postgres.
-                if market_item is not None:
-                    pgsql_cur.execute("INSERT INTO market_item (item_id, world_id, updated) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING", (item_id, world_id, market_item.last_upload_time))
+                    # The data in Scylla is outdated compared to the data in
+                    # Postgres, so ignore anything already in Postgres.
+                    if market_item is not None:
+                        pgsql_cur.execute("INSERT INTO market_item (item_id, world_id, updated) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING", (item_id, world_id, market_item.last_upload_time))
 
         logging.info("Data migration completed.")
