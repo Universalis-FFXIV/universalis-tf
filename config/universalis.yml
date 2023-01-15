@@ -168,7 +168,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 5
+      replicas: 6
       resources:
         limits:
           cpus: "2.00"
