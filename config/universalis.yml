@@ -77,6 +77,18 @@ services:
       placement:
         constraints:
           - "node.labels.cluster.critical != true"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.mogboard-http.rule=(Host(`universalis.app`) || Host(`staging.universalis.app`)) && (PathPrefix(`/market`) || PathPrefix(`/account`) || PathPrefix(`/_next`) || Path(`/about`) || Path(`/contribute`) || Path(`/`))
+        - traefik.http.routers.mogboard-http.entrypoints=http
+        - traefik.http.routers.mogboard-http.middlewares=https-redirect
+        - traefik.http.routers.mogboard-https.rule=(Host(`universalis.app`) || Host(`staging.universalis.app`)) && (PathPrefix(`/market`) || PathPrefix(`/account`) || PathPrefix(`/_next`) || Path(`/about`) || Path(`/contribute`) || Path(`/`))
+        - traefik.http.routers.mogboard-https.entrypoints=https
+        - traefik.http.routers.mogboard-https.tls=true
+        - traefik.http.routers.mogboard-https.tls.certresolver=le
+        - traefik.http.services.mogboard.loadbalancer.server.port=3000
   mariadb:
     image: "mariadb:10.3.32"
     environment:
