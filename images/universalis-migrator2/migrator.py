@@ -4,7 +4,7 @@ import logging
 import psycopg2
 import requests
 
-BATCH_SIZE = 1000
+TX_SIZE = 1000
 
 logging.basicConfig(encoding='utf-8', level=logging.DEBUG)
 
@@ -34,6 +34,7 @@ with psycopg2.connect("host=postgres dbname=universalis user=universalis passwor
     with pgsql_conn.cursor() as pgsql_cur:
         logging.info("Opened database cursor \"universalis-migrator2\".")
 
+        tx_size_current = 0
         for world_id in worlds:
             for item_id in marketable:
                 fetched_data = False
@@ -49,5 +50,11 @@ with psycopg2.connect("host=postgres dbname=universalis user=universalis passwor
                     # Postgres, so ignore anything already in Postgres.
                     if market_item is not None:
                         pgsql_cur.execute("INSERT INTO market_item (item_id, world_id, updated) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING", (item_id, world_id, market_item.last_upload_time))
+
+                        tx_size_current += 1
+                        if tx_size_current >= TX_SIZE:
+                            pgsql_conn.commit()
+                            logging.info(f"Committed {tx_size_current} records.")
+                            tx_size_current = 0
 
         logging.info("Data migration completed.")
