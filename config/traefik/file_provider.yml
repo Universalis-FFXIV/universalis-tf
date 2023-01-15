@@ -10,6 +10,24 @@ http:
       entrypoints: [https]
       tls: {}
       rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
+    universalis-gamedata-https:
+      service: universalis@docker
+      entrypoints: [https]
+      middlewares: [api-cache]
+      tls: {}
+      rule: Host(`universalis.app`) && PathPrefix(`/api/v3/game`)
+    universalis-misc-https:
+      service: universalis@docker
+      entrypoints: [https]
+      middlewares: [api-cache]
+      tls: {}
+      rule: Host(`universalis.app`) && PathPrefix(`/api/v3/misc`)
+    universalis-marketable-https:
+      service: universalis@docker
+      entrypoints: [https]
+      middlewares: [api-cache]
+      tls: {}
+      rule: Host(`universalis.app`) && (Path(`/api/(v2/)?marketable`) || Path(`/api/v3/marketable-items`))
   services:
     universalis_weighted:
       weighted:
@@ -23,6 +41,10 @@ http:
       redirectScheme:
         scheme: https
         permanent: true
+    api-cache:
+      plugin:
+        cache:
+          path: /mnt/cache/api
 serversTransport:
   forwardingTimeouts:
     responseHeaderTimeout: 5s
