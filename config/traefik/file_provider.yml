@@ -27,7 +27,7 @@ http:
       entrypoints: [https]
       middlewares: [api-cache]
       tls: {}
-      rule: (Host(`universalis.app`) || Host(`staging.universalis.app`)) && (Path(`/api/{path:(v2/)?marketable}`) || Path(`/api/v3/marketable-items`))
+      rule: (Host(`universalis.app`) || Host(`staging.universalis.app`)) && Path(`/api/{path:(v2/)?marketable}`)
   services:
     universalis_weighted:
       weighted:
