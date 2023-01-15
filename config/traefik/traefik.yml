@@ -14,10 +14,10 @@ services:
       resources:
         limits:
           cpus: '3.00'
-          memory: 3G
+          memory: 4G
         reservations:
           cpus: '3.00'
-          memory: 3G
+          memory: 4G
       placement:
         constraints:
           # Make the traefik service run only on the node with this label
