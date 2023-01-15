@@ -24,3 +24,6 @@ http:
       redirectScheme:
         scheme: https
         permanent: true
+serversTransport:
+  forwardingTimeouts:
+    responseHeaderTimeout: 5s
