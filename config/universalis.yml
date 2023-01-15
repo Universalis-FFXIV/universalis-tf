@@ -143,6 +143,8 @@ services:
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
+    logging:
+      driver: "local"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -177,6 +179,8 @@ services:
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     healthcheck:
       disable: true
+    logging:
+      driver: "local"
     depends_on:
       - "mariadb"
       - "scylla-lb"
@@ -473,10 +477,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "64M"
         reservations:
-          cpus: "0.20"
+          cpus: "0.50"
           memory: "64M"
   postgres:
     image: "postgres:14.3"
