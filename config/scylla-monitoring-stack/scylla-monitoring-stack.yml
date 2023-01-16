@@ -4,8 +4,6 @@ services:
     image: prom/alertmanager:v0.25.0
     networks:
       - scylla-monitoring-stack
-    volumes:
-    - /scylla-monitoring-stack/prometheus/rule_config.yml:/etc/alertmanager/config.yml
     deploy:
       resources:
         limits:
@@ -14,9 +12,10 @@ services:
         reservations:
           cpus: "0.05"
           memory: "64M"
-      placement:
-        constraints:
-          - "node.labels.scylla-monitoring-stack.data == true"
+    configs:
+      # /scylla-monitoring-stack/prometheus/rule_config.yml
+      - source: alertmanager
+        target: /etc/alertmanager/config.yml
   agraf:
     image: grafana/grafana:9.1.0
     environment:
@@ -105,8 +104,6 @@ services:
     - --config.file=/etc/promtail/config.yml
     networks:
       - scylla-monitoring-stack
-    volumes:
-    - /scylla-monitoring-stack/loki/promtail/promtail_config.compose.yml:/etc/promtail/config.yml
     deploy:
       resources:
         limits:
@@ -115,11 +112,17 @@ services:
         reservations:
           cpus: "0.10"
           memory: "512M"
-      placement:
-        constraints:
-          - "node.labels.scylla-monitoring-stack.data == true"
+    configs:
+      # /scylla-monitoring-stack/loki/promtail/promtail_config.compose.yml
+      - source: promtail
+        target: /etc/promtail/config.yml
 networks:
   scylla-monitoring-stack:
     external: true
   traefik-public:
+    external: true
+configs:
+  promtail:
+    external: true
+  alertmanager:
     external: true
