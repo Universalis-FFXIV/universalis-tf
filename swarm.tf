@@ -129,7 +129,7 @@ resource "hcloud_server" "swarm_manager_1" {
 
 resource "hcloud_server" "swarm_manager_2" {
   name               = "swarm-manager-2"
-  server_type        = "cpx41"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
