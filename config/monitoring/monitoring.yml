@@ -79,8 +79,6 @@ services:
   otel-collector:
     image: "otel/opentelemetry-collector:0.69.0"
     command: [ "--config=/etc/otel-collector.yaml" ]
-    volumes:
-      - "/monitoring/otel/otel-collector.yaml:/etc/otel-collector.yaml:ro"
     networks:
       - "net"
       - "victoria"
@@ -88,13 +86,13 @@ services:
       resources:
         limits:
           cpus: "0.50"
-          memory: "512M"
+          memory: "1G"
         reservations:
           cpus: "0.50"
-          memory: "512M"
-      placement:
-        constraints:
-          - "node.labels.monitoring.data == true"
+          memory: "1G"
+    configs:
+      - source: otel_collector
+        target: /etc/otel-collector.yaml
   grafana:
     image: "grafana/grafana:9.1.0"
     environment:
@@ -138,4 +136,7 @@ networks:
   victoria:
     external: true
   traefik-public:
+    external: true
+configs:
+  otel_collector:
     external: true
