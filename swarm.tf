@@ -194,7 +194,7 @@ output "swarm_manager_3_ip" {
 # MariaDB is assigned to this node
 resource "hcloud_server" "swarm_worker_1" {
   name               = "swarm-worker-1"
-  server_type        = "cpx41"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -245,7 +245,7 @@ resource "hcloud_server" "swarm_worker_2" {
 
 resource "hcloud_server" "swarm_worker_3" {
   name               = "swarm-worker-3"
-  server_type        = "cpx41"
+  server_type        = "cpx31"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
