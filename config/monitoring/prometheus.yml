@@ -64,6 +64,12 @@ scrape_configs:
           - "tasks.universalis-websocket"
         type: "A"
         port: 4002
+  - job_name: "Universalis Reserve"
+    dns_sd_configs:
+      - names:
+          - "tasks.universalis-reserve"
+        type: "A"
+        port: 4002
   - job_name: "Universalis Staging"
     dns_sd_configs:
       - names:
