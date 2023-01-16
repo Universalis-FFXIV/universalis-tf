@@ -173,9 +173,6 @@ services:
         reservations:
           cpus: "2.00"
           memory: "2G"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   universalis-canary:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.42.46"
     environment:
@@ -207,9 +204,6 @@ services:
         reservations:
           cpus: "2.00"
           memory: "2G"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   universalis-websocket:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.42.46"
     environment:
@@ -294,7 +288,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 2
+      replicas: 3
       resources:
         limits:
           cpus: "1.50"
@@ -331,9 +325,6 @@ services:
         reservations:
           cpus: "1.50"
           memory: "1G"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   universalis-staging:
     image: "ghcr.io/universalis-ffxiv/universalis-staging:v2"
     environment:
@@ -377,9 +368,6 @@ services:
         reservations:
           cpus: "0.25"
           memory: "512M"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   cache1:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --loglevel warning'
@@ -393,9 +381,6 @@ services:
         reservations:
           cpus: "0.50"
           memory: "2G"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   cache2:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
@@ -409,9 +394,6 @@ services:
         reservations:
           cpus: "0.50"
           memory: "2G"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   cache3:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
@@ -425,9 +407,6 @@ services:
         reservations:
           cpus: "0.50"
           memory: "2G"
-      placement:
-        constraints:
-          - "node.labels.cluster.critical != true"
   cache-staging1:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --loglevel warning'
