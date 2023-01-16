@@ -38,3 +38,13 @@ class Victoria(Custom):
         victoria_icon = "resources/victoria.png"
         urlretrieve(victoria_url, victoria_icon)
         super().__init__(label, victoria_icon)
+
+class Tempo(Custom):
+    def __init__(self, label):
+        tempo_icon = "resources/grafana-tempo.png"
+        super().__init__(label, tempo_icon)
+
+class OpenTelemetry(Custom):
+    def __init__(self, label):
+        tempo_icon = "resources/open-telemetry.png"
+        super().__init__(label, tempo_icon)

@@ -5,13 +5,13 @@ from diagrams.generic.storage import Storage
 from diagrams.onprem.certificates import LetsEncrypt
 from diagrams.onprem.compute import Server
 from diagrams.onprem.container import Docker
-from diagrams.onprem.database import Mariadb
+from diagrams.onprem.database import Mariadb, Postgresql
 from diagrams.onprem.inmemory import Redis
 from diagrams.onprem.monitoring import Grafana
 from diagrams.onprem.network import Nginx, Traefik
 from diagrams.onprem.queue import RabbitMQ
 from diagrams.programming.language import Csharp
-from third_party import Swarmpit, SwarmCronjob, Scylla, Cloudflare, Nextjs, Victoria
+from third_party import Swarmpit, SwarmCronjob, Scylla, Cloudflare, Nextjs, Victoria, Tempo, OpenTelemetry
 
 with Diagram("Universalis", show=False):
     with Cluster("Lodestone API"):
@@ -22,7 +22,7 @@ with Diagram("Universalis", show=False):
         lodestone_apig >> get_character  # type: ignore
 
     with Cluster("Universalis Redis (Dedicated Server)"):
-        universalis_redis = Redis("Stats & Point-in-time Listings")
+        universalis_redis = Redis("Stats & Tax Rates")
         universalis_redis - Redis("Replica")  # type: ignore
 
     cloudflare = Cloudflare("DNS")
@@ -41,11 +41,16 @@ with Diagram("Universalis", show=False):
         
         with Cluster("Monitoring Stack"):
             grafana = Grafana("Grafana")
+            tempo = Tempo("Tempo")
+            otel = OpenTelemetry("OpenTelemetry")
             victoria = Victoria("Victoria")
             
             swarmpit = Swarmpit("Swarmpit")
 
             ingress >> grafana >> victoria  # type: ignore
+            grafana >> tempo  # type: ignore
+            victoria >> tempo  # type: ignore
+            tempo >> otel  # type: ignore
             ingress >> swarmpit  # type: ignore
 
         with Cluster("Universalis"):
@@ -55,16 +60,16 @@ with Diagram("Universalis", show=False):
                 universalis_api = Csharp("API")
 
                 universalis_mq = RabbitMQ("WebSocket Events")
-
-                with Cluster("Market Board Sales"):
-                    universalis_db = Scylla("ScyllaDB")
+                universalis_sales_db = Scylla("Sales Database")
+                universalis_listings_db = Postgresql("Listings Database")
 
                 with Cluster("Distributed Cache"):
                     universalis_cache = Redis("Redis")
 
                 universalis_api >> universalis_mq  # type: ignore
                 universalis_api >> universalis_redis  # type: ignore
-                universalis_api >> universalis_db  # type: ignore
+                universalis_api >> universalis_sales_db  # type: ignore
+                universalis_api >> universalis_listings_db  # type: ignore
                 universalis_api >> universalis_cache  # type: ignore
                 universalis_router >> universalis_api  # type: ignore
 
