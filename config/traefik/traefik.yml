@@ -11,18 +11,18 @@ services:
       # Listen on port 443, default for HTTPS
       - 443:443
     deploy:
+      replicas: 3
       resources:
         limits:
-          cpus: '3.00'
-          memory: 5G
+          cpus: '1.00'
+          memory: 2G
         reservations:
-          cpus: '3.00'
-          memory: 5G
+          cpus: '1.00'
+          memory: 2G
       placement:
         constraints:
-          # Make the traefik service run only on the node with this label
-          # as the node with it has the volume for the certificates
-          - node.labels.traefik-public.traefik-public-certificates == true
+          # Ensure Traefik can access the Docker socket
+          - node.role == manager
       labels:
         # Enable Traefik for this service, to make it available in the public network
         - traefik.enable=true
@@ -56,12 +56,6 @@ services:
     volumes:
       # Add Docker as a mounted volume, so that Traefik can read the labels of other services
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # Mount the File provider configuration
-      - /traefik/providers:/etc/traefik_providers:ro
-      # Mount the certificate store
-      - /certificates:/mnt/certificates:ro
-      # Mount the filesystem cache
-      - /cache:/mnt/cache:rw
     command:
       # Enable Docker in Traefik, so that it reads labels from Docker services
       - --providers.docker
@@ -92,9 +86,22 @@ services:
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
       - victoria
-
+    secrets:
+      - universalis_cf_cert
+      - universalis_cf_key
+    configs:
+      - source: traefik_dynamic
+        target: /etc/traefik_providers/file_provider.yml
 networks:
   traefik-public:
     external: true
   victoria:
+    external: true
+secrets:
+  universalis_cf_cert:
+    external: true
+  universalis_cf_key:
+    external: true
+configs:
+  traefik_dynamic:
     external: true

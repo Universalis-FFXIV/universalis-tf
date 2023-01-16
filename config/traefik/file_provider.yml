@@ -50,11 +50,11 @@ http:
     api-cache:
       plugin:
         cache:
-          path: /mnt/cache/api
+          path: /tmp
 serversTransport:
   forwardingTimeouts:
     responseHeaderTimeout: 5s
 tls:
   certificates:
-    - certFile: /mnt/certificates/universalis.app.cert
-      keyFile: /mnt/certificates/universalis.app.key
+    - certFile: /run/secrets/universalis_cf_cert
+      keyFile: /run/secrets/universalis_cf_key
