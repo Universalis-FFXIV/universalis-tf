@@ -150,7 +150,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -161,7 +161,6 @@ services:
       - "postgres"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -172,7 +171,7 @@ services:
           cpus: "3.00"
           memory: "2G"
         reservations:
-          cpus: "1.00"
+          cpus: "0.50"
           memory: "1G"
   universalis-reserve:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
@@ -180,7 +179,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -191,7 +190,6 @@ services:
       - "postgres"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -210,7 +208,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -221,7 +219,6 @@ services:
       - "postgres"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -241,7 +238,7 @@ services:
       RECEIVE_STREAMING_EVENTS: "true"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -252,7 +249,6 @@ services:
       - "postgres-dummy"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -271,7 +267,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -282,7 +278,6 @@ services:
       - "postgres-dummy"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -301,7 +296,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -310,7 +305,6 @@ services:
       - "postgres"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -321,7 +315,7 @@ services:
           cpus: "2.00"
           memory: "1G"
         reservations:
-          cpus: "0.50"
+          cpus: "0.25"
           memory: "1G"
   universalis-upload:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
@@ -329,7 +323,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379,cache2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -338,7 +332,6 @@ services:
       - "postgres"
       - "rabbitmq"
       - "cache1"
-      - "cache2"
     networks:
       - "universalis"
       - "victoria"
@@ -357,7 +350,7 @@ services:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
-      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379,cache-staging2:6379"
+      UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
@@ -368,7 +361,6 @@ services:
       - "postgres"
       - "rabbitmq"
       - "cache-staging1"
-      - "cache-staging2"
     networks:
       - "universalis"
       - "victoria"
@@ -376,11 +368,11 @@ services:
       replicas: 2
       resources:
         limits:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.10"
+          memory: "256M"
         reservations:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.10"
+          memory: "256M"
   rabbitmq:
     image: "masstransit/rabbitmq:3.9.15"
     networks:
@@ -407,35 +399,9 @@ services:
         reservations:
           cpus: "0.50"
           memory: "2G"
-  cache2:
-    image: "redis:7.0.0"
-    command: 'redis-server --save "" --replicaof cache1 6379 --loglevel warning'
-    networks:
-      - "universalis"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: "2G"
-        reservations:
-          cpus: "0.50"
-          memory: "2G"
   cache-staging1:
     image: "redis:7.0.0"
     command: 'redis-server --save "" --loglevel warning'
-    networks:
-      - "universalis"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.10"
-          memory: "64M"
-        reservations:
-          cpus: "0.10"
-          memory: "64M"
-  cache-staging2:
-    image: "redis:7.0.0"
-    command: 'redis-server --save "" --replicaof cache-staging1 6379 --loglevel warning'
     networks:
       - "universalis"
     deploy:

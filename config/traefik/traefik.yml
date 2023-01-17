@@ -19,6 +19,8 @@ services:
         reservations:
           cpus: '1.00'
           memory: 2G
+      restart_policy:
+        delay: 60s
       placement:
         constraints:
           # Ensure Traefik can access the Docker socket
