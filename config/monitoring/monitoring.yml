@@ -69,10 +69,10 @@ services:
       resources:
         limits:
           cpus: "2.00"
-          memory: "3G"
+          memory: "4G"
         reservations:
-          cpus: "2.00"
-          memory: "3G"
+          cpus: "0.50"
+          memory: "4G"
       placement:
         constraints:
           - "node.labels.monitoring.data == true"
