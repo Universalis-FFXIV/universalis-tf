@@ -145,7 +145,7 @@ services:
         constraints:
           - "node.labels.mogboard.db-data == true"
   universalis:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -166,6 +166,8 @@ services:
       - "victoria"
     deploy:
       replicas: 8
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "3.00"
@@ -174,7 +176,7 @@ services:
           cpus: "0.50"
           memory: "1G"
   universalis-reserve:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -195,6 +197,8 @@ services:
       - "victoria"
     deploy:
       replicas: 3
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "0.50"
@@ -203,7 +207,7 @@ services:
           cpus: "0.10"
           memory: "256M"
   universalis-canary:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -224,6 +228,8 @@ services:
       - "victoria"
     deploy:
       replicas: 1
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "3.00"
@@ -232,7 +238,7 @@ services:
           cpus: "1.00"
           memory: "1G"
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
@@ -254,6 +260,8 @@ services:
       - "victoria"
     deploy:
       replicas: 2
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "1.00"
@@ -262,7 +270,7 @@ services:
           cpus: "0.50"
           memory: "512M"
   universalis-extra:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -283,6 +291,8 @@ services:
       - "victoria"
     deploy:
       replicas: 3
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "0.25"
@@ -291,7 +301,7 @@ services:
           cpus: "0.25"
           memory: "1G"
   universalis-history:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -310,6 +320,8 @@ services:
       - "victoria"
     deploy:
       replicas: 3
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "2.00"
@@ -318,7 +330,7 @@ services:
           cpus: "0.25"
           memory: "1G"
   universalis-upload:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.49"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.42.50"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -337,6 +349,8 @@ services:
       - "victoria"
     deploy:
       replicas: 3
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "2.00"
@@ -366,6 +380,8 @@ services:
       - "victoria"
     deploy:
       replicas: 2
+      restart_policy:
+        delay: 60s
       resources:
         limits:
           cpus: "0.10"
