@@ -152,7 +152,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "65.108.107.235:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=15;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -165,15 +165,15 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 20
+      replicas: 10
       restart_policy:
-        delay: 60s
+        delay: 30s
       resources:
         limits:
           cpus: "2.00"
           memory: "2G"
         reservations:
-          cpus: "0.25"
+          cpus: "0.50"
           memory: "1G"
   universalis-reserve:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.42.69"
@@ -413,7 +413,7 @@ services:
           cpus: "0.25"
           memory: "512M"
   cache1:
-    image: "redis:7.0.0"
+    image: "redis:7.0.8"
     command: 'redis-server --save "" --loglevel warning'
     networks:
       - "universalis"
@@ -426,7 +426,7 @@ services:
           cpus: "0.50"
           memory: "2G"
   cache-staging1:
-    image: "redis:7.0.0"
+    image: "redis:7.0.8"
     command: 'redis-server --save "" --loglevel warning'
     networks:
       - "universalis"
