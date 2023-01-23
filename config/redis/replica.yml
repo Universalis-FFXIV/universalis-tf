@@ -1,7 +1,7 @@
 version: "2.4"
 services:
   redis:
-    image: "redis:7.0.0"
+    image: "redis:7.0.8"
     command:
       - "redis-server"
       - "--port"
@@ -20,7 +20,7 @@ services:
       - "warning"
     network_mode: "host"
     volumes:
-      - "/home/universalis/db/data:/data:rw"
+      - "/redis/data:/data:rw"
   exporter:
     image: "oliver006/redis_exporter:v1.45.0"
     network_mode: "host"
