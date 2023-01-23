@@ -152,7 +152,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=20;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -183,7 +183,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -214,7 +214,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -312,7 +312,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -343,7 +343,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Write Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Write Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -374,7 +374,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache-staging1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -440,8 +440,7 @@ services:
           memory: "64M"
   postgres:
     image: "postgres:14.6"
-    # TODO: Mount a config file
-    command: "postgres -c shared_preload_libraries=pg_stat_statements -c max_connections=400 -c shared_buffers=2560MB -c effective_cache_size=7680MB -c maintenance_work_mem=1280MB -c checkpoint_completion_target=0.9 -c wal_buffers=16MB -c default_statistics_target=500 -c random_page_cost=1.1 -c effective_io_concurrency=200 -c work_mem=1092kB -c min_wal_size=4GB -c max_wal_size=16GB -c max_worker_processes=6 -c max_parallel_workers_per_gather=3 -c max_parallel_workers=6 -c max_parallel_maintenance_workers=3"
+    command: "postgres -c shared_preload_libraries=pg_stat_statements"
     environment:
       POSTGRES_USER: "universalis"
       POSTGRES_PASSWORD: "universalis"
@@ -452,18 +451,18 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "6.00"
-          memory: "10G"
+          cpus: "1.00"
+          memory: "1G"
         reservations:
-          cpus: "4.00"
-          memory: "10G"
+          cpus: "1.00"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.universalis.db-data == true"
   postgres-exporter:
     image: "quay.io/prometheuscommunity/postgres-exporter:v0.11.0"
     environment:
-      DATA_SOURCE_NAME: "postgresql://universalis:universalis@postgres:5432/universalis?sslmode=disable"
+      DATA_SOURCE_NAME: "postgresql://universalis:universalis@10.0.200.3:5432/universalis?sslmode=disable"
     networks:
       - "universalis"
       - "victoria"
@@ -498,7 +497,7 @@ services:
       AWS_PROFILE: "swarm"
       SYNC_SOURCE: "/dump"
       SYNC_TARGET: "s3://universalis-postgres-backup"
-      REMOTE_POSTGRES_HOST: "postgres"
+      REMOTE_POSTGRES_HOST: "10.0.200.3"
       REMOTE_POSTGRES_DATABASE: "universalis"
       REMOTE_POSTGRES_USER: "universalis"
       REMOTE_POSTGRES_PASSWORD: "universalis"
