@@ -165,7 +165,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 10
+      replicas: 12
       restart_policy:
         delay: 30s
       resources:
@@ -246,7 +246,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -254,7 +254,6 @@ services:
       disable: true
     depends_on:
       - "mariadb"
-      - "postgres-dummy"
       - "rabbitmq"
       - "cache1"
     networks:
@@ -279,7 +278,7 @@ services:
       UNIVERSALIS_REDIS_CONNECTION: "10.0.200.3:6379,abortConnect=false"
       UNIVERSALIS_REDIS_CACHE_CONNECTION: "cache1:6379"
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
-      UNIVERSALIS_POSTGRES_CONNECTION: "Host=postgres-dummy;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
+      UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
     logging:
       driver: "local"
@@ -287,7 +286,6 @@ services:
       disable: true
     depends_on:
       - "mariadb"
-      - "postgres-dummy"
       - "rabbitmq"
       - "cache1"
     networks:
@@ -325,7 +323,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 3
+      replicas: 4
       restart_policy:
         delay: 60s
       resources:
@@ -356,7 +354,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 3
+      replicas: 5
       restart_policy:
         delay: 60s
       resources:
@@ -438,27 +436,6 @@ services:
         reservations:
           cpus: "0.03"
           memory: "64M"
-  postgres:
-    image: "postgres:14.6"
-    command: "postgres -c shared_preload_libraries=pg_stat_statements"
-    environment:
-      POSTGRES_USER: "universalis"
-      POSTGRES_PASSWORD: "universalis"
-    volumes:
-      - "/mnt/api-db/data:/var/lib/postgresql/data"
-    networks:
-      - "universalis"
-    deploy:
-      resources:
-        limits:
-          cpus: "1.00"
-          memory: "1G"
-        reservations:
-          cpus: "1.00"
-          memory: "1G"
-      placement:
-        constraints:
-          - "node.labels.universalis.db-data == true"
   postgres-exporter:
     image: "quay.io/prometheuscommunity/postgres-exporter:v0.11.0"
     environment:
@@ -473,21 +450,6 @@ services:
           memory: "512M"
         reservations:
           cpus: "0.20"
-          memory: "512M"
-  postgres-dummy:
-    image: "postgres:14.6"
-    environment:
-      POSTGRES_USER: "universalis"
-      POSTGRES_PASSWORD: "universalis"
-    networks:
-      - "universalis"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.20"
-          memory: "512M"
-        reservations:
-          cpus: "0.03"
           memory: "512M"
   postgres-s3sync:
     image: "karashiiro/universalis-s3sync-postgres:latest"
