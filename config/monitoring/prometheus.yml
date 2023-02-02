@@ -35,7 +35,7 @@ scrape_configs:
       - names:
           - "tasks.traefik"
         type: "A"
-        port: 8000
+        port: 8080
   - job_name: "RabbitMQ"
     dns_sd_configs:
       - names:
