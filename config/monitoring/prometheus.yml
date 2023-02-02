@@ -2,10 +2,6 @@ global:
   scrape_interval: "5s"
   scrape_timeout: "5s"
 scrape_configs:
-  - job_name: "Traefik"
-    static_configs:
-      - targets:
-          - "traefik:8080"
   - job_name: "PostgreSQL"
     static_configs:
       - targets:
@@ -34,6 +30,18 @@ scrape_configs:
     static_configs:
       - targets:
           - "65.108.107.235:9122"
+  - job_name: "Traefik"
+    dns_sd_configs:
+      - names:
+          - "tasks.traefik"
+        type: "A"
+        port: 8000
+  - job_name: "RabbitMQ"
+    dns_sd_configs:
+      - names:
+          - "tasks.rabbitmq"
+        type: "A"
+        port: 15692
   - job_name: "Universalis"
     dns_sd_configs:
       - names:
