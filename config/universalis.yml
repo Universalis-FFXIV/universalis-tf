@@ -13,6 +13,8 @@ services:
     networks:
       - "universalis"
       - "traefik-public"
+    logging:
+      driver: "local"
     deploy:
       replicas: 5
       resources:
@@ -41,6 +43,8 @@ services:
     networks:
       - "universalis"
       - "traefik-public"
+    logging:
+      driver: "local"
     deploy:
       replicas: 2
       resources:
