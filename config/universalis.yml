@@ -205,10 +205,10 @@ services:
         delay: 60s
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "1.00"
+          memory: "1G"
         reservations:
-          cpus: "0.10"
+          cpus: "0.20"
           memory: "256M"
   universalis-canary:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.43.2"
