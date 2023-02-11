@@ -96,6 +96,12 @@ scrape_configs:
           - "tasks.cadvisor"
         type: "A"
         port: 8080
+  - job_name: "Mogboard Alerts"
+    dns_sd_configs:
+      - names:
+          - "tasks.mogboard-alerts"
+        type: "A"
+        port: 9000
   - job_name: "node"
     static_configs:
       - targets:
