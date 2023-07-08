@@ -381,7 +381,7 @@ resource "hcloud_volume" "website_db" {
 resource "hcloud_volume" "api_db" {
   name              = "api-db"
   location          = "hel1"
-  size              = 60
+  size              = 120
   format            = "ext4"
   delete_protection = true
 }
