@@ -63,7 +63,7 @@ services:
         - traefik.constraint-label=traefik-public
         - traefik.http.services.universalis_canary.loadbalancer.server.port=80
   mogboard:
-    image: "ghcr.io/universalis-ffxiv/mogboard-next:v1.11.1"
+    image: "ghcr.io/universalis-ffxiv/mogboard-next:v1.12.0"
     env_file:
       - "/universalis/mogboard.env"
     depends_on:
