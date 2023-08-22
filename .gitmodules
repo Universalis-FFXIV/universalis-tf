@@ -1,3 +1,6 @@
 [submodule "images/universalis-act-nginx/universalis_act_plugin"]
 	path = images/universalis-act-nginx/universalis_act_plugin
 	url = https://github.com/goaaats/universalis_act_plugin
+[submodule "images/lalafell-api/Lalafell.API"]
+	path = images/lalafell-api/Lalafell.API
+	url = https://github.com/kokose1234/Lalafell.API.git
