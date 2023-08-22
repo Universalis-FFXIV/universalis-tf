@@ -3,6 +3,7 @@ services:
   nginx:
     image: "karashiiro/universalis-nginx:latest"
     depends_on:
+      - "lalafell-api"
       - "mogboard"
       - "universalis"
       - "universalis-websocket"
@@ -169,6 +170,30 @@ services:
         reservations:
           cpus: "0.10"
           memory: "256M"
+  lalafell-api:
+    image: "karashiiro/lalafell-api:latest"
+    networks:
+      - "traefik-public"
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: "512M"
+        reservations:
+          cpus: "0.07"
+          memory: "256M"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.universalis-docs-http.rule=Host(`lalafell-api.universalis.app`)
+        - traefik.http.routers.universalis-docs-http.entrypoints=http
+        - traefik.http.routers.universalis-docs-http.middlewares=https-redirect
+        - traefik.http.routers.universalis-docs-https.rule=Host(`lalafell-api.universalis.app`)
+        - traefik.http.routers.universalis-docs-https.entrypoints=https
+        - traefik.http.routers.universalis-docs-https.tls=true
+        - traefik.http.services.universalis-docs.loadbalancer.server.port=80
   universalis:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.45.1"
     environment:
