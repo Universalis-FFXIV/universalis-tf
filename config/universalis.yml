@@ -187,13 +187,13 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.universalis-docs-http.rule=Host(`lalafell-api.universalis.app`)
-        - traefik.http.routers.universalis-docs-http.entrypoints=http
-        - traefik.http.routers.universalis-docs-http.middlewares=https-redirect
-        - traefik.http.routers.universalis-docs-https.rule=Host(`lalafell-api.universalis.app`)
-        - traefik.http.routers.universalis-docs-https.entrypoints=https
-        - traefik.http.routers.universalis-docs-https.tls=true
-        - traefik.http.services.universalis-docs.loadbalancer.server.port=80
+        - traefik.http.routers.lalafell-api-http.rule=Host(`lalafell-api.universalis.app`)
+        - traefik.http.routers.lalafell-api-http.entrypoints=http
+        - traefik.http.routers.lalafell-api-http.middlewares=https-redirect
+        - traefik.http.routers.lalafell-api-https.rule=Host(`lalafell-api.universalis.app`)
+        - traefik.http.routers.lalafell-api-https.entrypoints=https
+        - traefik.http.routers.lalafell-api-https.tls=true
+        - traefik.http.services.lalafell-api.loadbalancer.server.port=80
   universalis:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.45.1"
     environment:
