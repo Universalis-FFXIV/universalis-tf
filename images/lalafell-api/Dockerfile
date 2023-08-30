@@ -12,6 +12,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0
 # Download sheets
 WORKDIR /sqpack/ffxiv
 RUN apt update && apt install curl -y
+
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN curl -O https://s3.us-west-1.wasabisys.com/universalis-ffxiv-sqpack-kr/sqpack/ffxiv/0a0000.win32.dat0
 RUN curl -O https://s3.us-west-1.wasabisys.com/universalis-ffxiv-sqpack-kr/sqpack/ffxiv/0a0000.win32.index2
 RUN curl -O https://s3.us-west-1.wasabisys.com/universalis-ffxiv-sqpack-kr/sqpack/ffxiv/0a0000.win32.index
