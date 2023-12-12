@@ -14,9 +14,9 @@ WORKDIR /sqpack/ffxiv
 RUN apt update && apt install curl -y
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN curl -O https://s3.us-west-1.wasabisys.com/universalis-ffxiv-sqpack-kr/sqpack/ffxiv/0a0000.win32.dat0
-RUN curl -O https://s3.us-west-1.wasabisys.com/universalis-ffxiv-sqpack-kr/sqpack/ffxiv/0a0000.win32.index2
-RUN curl -O https://s3.us-west-1.wasabisys.com/universalis-ffxiv-sqpack-kr/sqpack/ffxiv/0a0000.win32.index
+RUN curl -O https://media.githubusercontent.com/media/karashiiro/0a0000_kr/main/0a0000.win32.dat0
+RUN curl -O https://media.githubusercontent.com/media/karashiiro/0a0000_kr/main/0a0000.win32.index2
+RUN curl -O https://media.githubusercontent.com/media/karashiiro/0a0000_kr/main/0a0000.win32.index
 
 WORKDIR /app
 COPY --from=build-env /source/bin/ ./
