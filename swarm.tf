@@ -281,7 +281,7 @@ output "swarm_worker_3_ip" {
 
 resource "hcloud_server" "scylla_1" {
   name               = "scylla-1"
-  server_type        = "ccx22"
+  server_type        = "ccx23"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -307,7 +307,7 @@ resource "hcloud_server" "scylla_1" {
 
 resource "hcloud_server" "scylla_2" {
   name               = "scylla-2"
-  server_type        = "ccx22"
+  server_type        = "ccx23"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -333,7 +333,7 @@ resource "hcloud_server" "scylla_2" {
 
 resource "hcloud_server" "scylla_3" {
   name               = "scylla-3"
-  server_type        = "ccx22"
+  server_type        = "ccx23"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
