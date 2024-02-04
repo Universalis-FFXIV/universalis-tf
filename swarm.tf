@@ -267,6 +267,31 @@ resource "hcloud_server" "swarm_worker_3" {
   ]
 }
 
+resource "hcloud_server" "swarm_worker_5" {
+  name               = "swarm-worker-5"
+  server_type        = "cpx31"
+  image              = "40093247" # docker-ce amd64
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.10"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
 output "swarm_worker_1_ip" {
   value = hcloud_server.swarm_worker_1.ipv4_address
 }
@@ -277,6 +302,10 @@ output "swarm_worker_2_ip" {
 
 output "swarm_worker_3_ip" {
   value = hcloud_server.swarm_worker_3.ipv4_address
+}
+
+output "swarm_worker_5_ip" {
+  value = hcloud_server.swarm_worker_5.ipv4_address
 }
 
 resource "hcloud_server" "scylla_1" {
@@ -519,6 +548,12 @@ resource "hcloud_load_balancer_target" "lb_target_swarm_worker_3" {
   server_id        = hcloud_server.swarm_worker_3.id
 }
 
+resource "hcloud_load_balancer_target" "lb_target_swarm_worker_5" {
+  type             = "server"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  server_id        = hcloud_server.swarm_worker_5.id
+}
+
 # Add servers to the firewall
 resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
   firewall_id = hcloud_firewall.swarm_firewall.id
@@ -529,6 +564,7 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_worker_1.id,
     hcloud_server.swarm_worker_2.id,
     hcloud_server.swarm_worker_3.id,
+    hcloud_server.swarm_worker_5.id,
     hcloud_server.scylla_1.id,
     hcloud_server.scylla_2.id,
     hcloud_server.scylla_3.id
