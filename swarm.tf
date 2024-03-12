@@ -49,49 +49,6 @@ resource "hcloud_firewall" "swarm_firewall" {
     port       = "any"
     source_ips = ["10.0.0.0/16", "95.216.241.171/32"]
   }
-
-  // HTTP
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "80"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-  }
-
-  // HTTPS
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "443"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-  }
-
-  // HTTP/3
-  rule {
-    direction = "in"
-    protocol  = "udp"
-    port      = "80"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "udp"
-    port      = "443"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-  }
 }
 
 # TODO: Add a bastion
@@ -522,36 +479,42 @@ resource "hcloud_load_balancer_target" "lb_target_swarm_manager_1" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_manager_1.id
+  use_private_ip   = true
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_manager_2" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_manager_2.id
+  use_private_ip   = true
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_manager_3" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_manager_3.id
+  use_private_ip   = true
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_worker_1" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_worker_1.id
+  use_private_ip   = true
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_worker_2" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_worker_2.id
+  use_private_ip   = true
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_worker_3" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_worker_3.id
+  use_private_ip   = true
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_worker_4" {
@@ -564,6 +527,7 @@ resource "hcloud_load_balancer_target" "lb_target_swarm_worker_5" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_worker_5.id
+  use_private_ip   = true
 }
 
 # Add servers to the firewall
