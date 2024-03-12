@@ -270,7 +270,7 @@ resource "hcloud_server" "swarm_worker_3" {
 resource "hcloud_server" "swarm_worker_5" {
   name               = "swarm-worker-5"
   server_type        = "cpx31"
-  image              = "40093247" # docker-ce amd64
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
@@ -486,7 +486,7 @@ resource "hcloud_volume_attachment" "metrics_db_ref" {
 # Set up load balancer
 resource "hcloud_load_balancer" "lb_swarm" {
   name               = "load-balancer"
-  load_balancer_type = "lb11"
+  load_balancer_type = "lb21"
   location           = "hel1"
   delete_protection  = true
   algorithm {
@@ -496,6 +496,12 @@ resource "hcloud_load_balancer" "lb_swarm" {
 
 output "swarm_load_balancer_ip" {
   value = hcloud_load_balancer.lb_swarm.ipv4
+}
+
+resource "hcloud_load_balancer_network" "lb_swarm_network" {
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  network_id       = hcloud_network.network.id
+  ip               = "10.0.1.240"
 }
 
 resource "hcloud_load_balancer_service" "lb_service_swarm_http" {
@@ -546,6 +552,12 @@ resource "hcloud_load_balancer_target" "lb_target_swarm_worker_3" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_worker_3.id
+}
+
+resource "hcloud_load_balancer_target" "lb_target_swarm_worker_4" {
+  type             = "ip"
+  load_balancer_id = hcloud_load_balancer.lb_swarm.id
+  ip               = "95.216.241.171"
 }
 
 resource "hcloud_load_balancer_target" "lb_target_swarm_worker_5" {
