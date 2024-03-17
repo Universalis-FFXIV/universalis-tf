@@ -399,7 +399,7 @@ resource "hcloud_volume" "api_db_3" {
 resource "hcloud_volume" "metrics_db" {
   name              = "metrics-db"
   location          = "hel1"
-  size              = 40
+  size              = 60
   format            = "ext4"
   delete_protection = true
 }
