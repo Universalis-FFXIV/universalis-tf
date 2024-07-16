@@ -61,7 +61,7 @@ resource "hcloud_ssh_key" "swarm_ssh" {
 # Provision the manager nodes
 resource "hcloud_server" "swarm_manager_1" {
   name               = "swarm-manager-1"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -86,7 +86,7 @@ resource "hcloud_server" "swarm_manager_1" {
 
 resource "hcloud_server" "swarm_manager_2" {
   name               = "swarm-manager-2"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -111,7 +111,7 @@ resource "hcloud_server" "swarm_manager_2" {
 
 resource "hcloud_server" "swarm_manager_3" {
   name               = "swarm-manager-3"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -151,7 +151,7 @@ output "swarm_manager_3_ip" {
 # MariaDB is assigned to this node
 resource "hcloud_server" "swarm_worker_1" {
   name               = "swarm-worker-1"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -176,7 +176,7 @@ resource "hcloud_server" "swarm_worker_1" {
 
 resource "hcloud_server" "swarm_worker_2" {
   name               = "swarm-worker-2"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -201,7 +201,7 @@ resource "hcloud_server" "swarm_worker_2" {
 
 resource "hcloud_server" "swarm_worker_3" {
   name               = "swarm-worker-3"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
@@ -226,7 +226,7 @@ resource "hcloud_server" "swarm_worker_3" {
 
 resource "hcloud_server" "swarm_worker_5" {
   name               = "swarm-worker-5"
-  server_type        = "cpx31"
+  server_type        = "cx42"
   image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
