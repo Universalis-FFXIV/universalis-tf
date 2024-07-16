@@ -3,22 +3,21 @@ version: '3.3'
 services:
 
   traefik:
-    # Use the latest v2.9.x Traefik image available
-    image: traefik:v2.9
+    image: traefik:v2.9.10
     ports:
       # Listen on port 80, default for HTTP, necessary to redirect to HTTPS
       - 80:80
       # Listen on port 443, default for HTTPS
       - 443:443
     deploy:
-      replicas: 3
+      mode: global
       resources:
         limits:
-          cpus: '1.00'
-          memory: 2G
+          cpus: '3.00'
+          memory: 6G
         reservations:
-          cpus: '1.00'
-          memory: 2G
+          cpus: '1.50'
+          memory: 6G
       restart_policy:
         delay: 60s
       placement:
@@ -92,7 +91,7 @@ services:
       - universalis_cf_cert
       - universalis_cf_key
     configs:
-      - source: traefik_dynamic
+      - source: traefik_dynamic-v2
         target: /etc/traefik_providers/file_provider.yml
 networks:
   traefik-public:
@@ -105,5 +104,5 @@ secrets:
   universalis_cf_key:
     external: true
 configs:
-  traefik_dynamic:
+  traefik_dynamic-v2:
     external: true
