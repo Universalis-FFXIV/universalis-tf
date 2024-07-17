@@ -8,6 +8,7 @@ http:
     universalis-https:
       service: universalis_weighted
       entrypoints: [https]
+      middlewares: [max-inflightreq]
       tls: {}
       rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
     universalis-stats-https:
@@ -51,6 +52,9 @@ http:
       plugin:
         cache:
           path: /tmp
+    max-inflightreq:
+      inFlightReq:
+        amount: 6000 # Failure point is around 8000
 serversTransport:
   forwardingTimeouts:
     dialTimeout: 10s
