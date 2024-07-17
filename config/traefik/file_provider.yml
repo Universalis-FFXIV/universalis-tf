@@ -8,7 +8,7 @@ http:
     universalis-https:
       service: universalis_weighted
       entrypoints: [https]
-      middlewares: [max-inflightreq]
+      middlewares: [rate-limit, max-inflightreq, global-max-inflightreq, compress-response, buffer-response]
       tls: {}
       rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
     universalis-stats-https:
@@ -40,9 +40,9 @@ http:
       weighted:
         services:
           - name: universalis@docker
-            weight: 86
+            weight: 98
           - name: universalis_canary@docker
-            weight: 14
+            weight: 2
   middlewares:
     https-redirect:
       redirectScheme:
@@ -54,11 +54,28 @@ http:
           path: /tmp
     max-inflightreq:
       inFlightReq:
-        amount: 6000 # Failure point is around 8000
+        amount: 3 # 8 / 3 = 2.66
+        sourceCriterion:
+          requestHeaderName: CF-Connecting-IP
+    global-max-inflightreq:
+      inFlightReq:
+        amount: 4500 # 13.5k / 3 = 4.5k
+    rate-limit:
+      rateLimit:
+        average: 9 # 25 / 3 = 8.33
+        burst: 17 # 50 / 3 = 16.66
+        sourceCriterion:
+          requestHeaderName: CF-Connecting-IP
+    compress-response:
+      compress: {}
+    buffer-response:
+      buffering:
+        memResponseBodyBytes: 200000
 serversTransport:
   forwardingTimeouts:
     dialTimeout: 10s
     responseHeaderTimeout: 5s
+    idleConnTimeout: 30s
 tls:
   certificates:
     - certFile: /run/secrets/universalis_cf_cert
