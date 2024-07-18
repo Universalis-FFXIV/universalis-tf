@@ -475,6 +475,7 @@ resource "hcloud_load_balancer_service" "lb_service_swarm_https" {
   destination_port = 443
 }
 
+# Traefik runs on each manager node, so we direct the LB towards those
 resource "hcloud_load_balancer_target" "lb_target_swarm_manager_1" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
@@ -493,40 +494,6 @@ resource "hcloud_load_balancer_target" "lb_target_swarm_manager_3" {
   type             = "server"
   load_balancer_id = hcloud_load_balancer.lb_swarm.id
   server_id        = hcloud_server.swarm_manager_3.id
-  use_private_ip   = true
-}
-
-resource "hcloud_load_balancer_target" "lb_target_swarm_worker_1" {
-  type             = "server"
-  load_balancer_id = hcloud_load_balancer.lb_swarm.id
-  server_id        = hcloud_server.swarm_worker_1.id
-  use_private_ip   = true
-}
-
-resource "hcloud_load_balancer_target" "lb_target_swarm_worker_2" {
-  type             = "server"
-  load_balancer_id = hcloud_load_balancer.lb_swarm.id
-  server_id        = hcloud_server.swarm_worker_2.id
-  use_private_ip   = true
-}
-
-resource "hcloud_load_balancer_target" "lb_target_swarm_worker_3" {
-  type             = "server"
-  load_balancer_id = hcloud_load_balancer.lb_swarm.id
-  server_id        = hcloud_server.swarm_worker_3.id
-  use_private_ip   = true
-}
-
-resource "hcloud_load_balancer_target" "lb_target_swarm_worker_4" {
-  type             = "ip"
-  load_balancer_id = hcloud_load_balancer.lb_swarm.id
-  ip               = "95.216.241.171"
-}
-
-resource "hcloud_load_balancer_target" "lb_target_swarm_worker_5" {
-  type             = "server"
-  load_balancer_id = hcloud_load_balancer.lb_swarm.id
-  server_id        = hcloud_server.swarm_worker_5.id
   use_private_ip   = true
 }
 
