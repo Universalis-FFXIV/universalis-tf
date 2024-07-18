@@ -59,7 +59,7 @@ http:
           requestHeaderName: CF-Connecting-IP
     global-max-inflightreq:
       inFlightReq:
-        amount: 4500 # 13.5k / 3 = 4.5k
+        amount: 5000 # 15k / 3 = 5k
     rate-limit:
       rateLimit:
         average: 9 # 25 / 3 = 8.33
