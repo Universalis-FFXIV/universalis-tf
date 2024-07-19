@@ -593,6 +593,16 @@ services:
         reservations:
           cpus: "0.20"
           memory: "512M"
+  postgres-reindexer:
+    image: "karashiiro/universalis-reindexer:latest"
+    deploy:
+      replicas: 0
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=0 0 * * * *"
+        - "swarm.cronjob.skip-running=false"
+      restart_policy:
+        condition: "none"
   postgres-s3sync:
     image: "karashiiro/universalis-s3sync-postgres:latest"
     environment:
