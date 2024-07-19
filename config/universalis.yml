@@ -215,7 +215,7 @@ services:
           cpus: "0.07"
           memory: "256M"
   universalis:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -224,6 +224,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=15;Read Buffer Size=32768;Minimum Pool Size=1;Maximum Pool Size=30;Connection Idle Lifetime=10;No Reset On Close=true"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
+      DISABLE_WEBSOCKET_EVENT_QUEUE: "true" # Avoid potential connection errors when we aren't even using WS on this container
     logging:
       driver: "local"
     healthcheck:
@@ -239,7 +240,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 8
+      replicas: 7
       restart_policy:
         delay: 15s
       update_config:
@@ -249,10 +250,10 @@ services:
           cpus: "6.00"
           memory: "6G"
         reservations:
-          cpus: "5.00"
-          memory: "5G"
+          cpus: "4.00"
+          memory: "6G"
   universalis-reserve:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -261,6 +262,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
+      DISABLE_WEBSOCKET_EVENT_QUEUE: "true" # Avoid potential connection errors when we aren't even using WS on this container
     logging:
       driver: "local"
     depends_on:
@@ -285,7 +287,7 @@ services:
           cpus: "2.00"
           memory: "3G"
   universalis-canary:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -317,10 +319,10 @@ services:
           cpus: "6.00"
           memory: "6G"
         reservations:
-          cpus: "5.00"
-          memory: "5G"
+          cpus: "4.00"
+          memory: "6G"
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
@@ -355,7 +357,7 @@ services:
           cpus: "0.20"
           memory: "256M"
   universalis-extra:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -364,6 +366,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Read Buffer Size=32768;Maximum Pool Size=2;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
+      DISABLE_WEBSOCKET_EVENT_QUEUE: "true" # Avoid potential connection errors when we aren't even using WS on this container
     logging:
       driver: "local"
     healthcheck:
@@ -389,7 +392,7 @@ services:
           cpus: "0.25"
           memory: "1G"
   universalis-history:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -399,6 +402,7 @@ services:
       UNIVERSALIS_SCYLLA_PAGE_SIZE: "1000"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=10;Read Buffer Size=32768;Maximum Pool Size=10;Connection Idle Lifetime=10"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
+      DISABLE_WEBSOCKET_EVENT_QUEUE: "true" # Avoid potential connection errors when we aren't even using WS on this container
     logging:
       driver: "local"
     depends_on:
@@ -423,7 +427,7 @@ services:
           cpus: "0.25"
           memory: "1G"
   universalis-upload:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.99"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.108"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -445,7 +449,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 7
+      replicas: 5
       restart_policy:
         delay: 60s
       resources:
@@ -497,10 +501,10 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: "0.25"
+          cpus: "1.00"
           memory: "512M"
         reservations:
-          cpus: "0.25"
+          cpus: "0.50"
           memory: "512M"
   cache1:
     image: "redis:7.0.8"
