@@ -40,9 +40,9 @@ http:
       weighted:
         services:
           - name: universalis@docker
-            weight: 88
+            weight: 90
           - name: universalis_canary@docker
-            weight: 12
+            weight: 10
   middlewares:
     https-redirect:
       redirectScheme:
@@ -59,7 +59,7 @@ http:
           requestHeaderName: CF-Connecting-IP
     global-max-inflightreq:
       inFlightReq:
-        amount: 5000 # 15k / 3 = 5k
+        amount: 8000 # 24k / 3 = 8k
     rate-limit:
       rateLimit:
         average: 9 # 25 / 3 = 8.33
