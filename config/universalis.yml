@@ -34,6 +34,7 @@ services:
         - traefik.constraint-label=traefik-public
         - traefik.http.services.universalis.loadbalancer.server.port=80
         - traefik.http.services.universalis.loadbalancer.responseForwarding.flushInterval=100ms
+        - traefik.http.services.universalis.loadbalancer.sticky.cookie
   nginx-canary:
     image: "karashiiro/universalis-nginx-canary:latest"
     depends_on:
@@ -215,7 +216,7 @@ services:
           cpus: "0.07"
           memory: "256M"
   universalis:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -224,6 +225,7 @@ services:
       UNIVERSALIS_SCYLLA_CONNECTION: "10.0.1.7,10.0.1.8,10.0.1.9"
       UNIVERSALIS_POSTGRES_CONNECTION: "Host=10.0.200.3;Port=5432;Username=universalis;Password=universalis;Database=universalis;Command Timeout=5;Max Auto Prepare=15;Read Buffer Size=32768;Minimum Pool Size=1;Maximum Pool Size=30;Connection Idle Lifetime=10;No Reset On Close=true"
       UNIVERSALIS_OLTP_ENDPOINT: "http://otel-collector:4317" # From monitoring stack
+      UNIVERSALIS_MIN_THREADPOOL_SIZE: "200"
       DISABLE_WEBSOCKET_EVENT_QUEUE: "true" # Avoid potential connection errors when we aren't even using WS on this container
     logging:
       driver: "local"
@@ -253,7 +255,7 @@ services:
           cpus: "4.00"
           memory: "6G"
   universalis-reserve:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -287,7 +289,7 @@ services:
           cpus: "2.00"
           memory: "3G"
   universalis-canary:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -322,7 +324,7 @@ services:
           cpus: "4.00"
           memory: "6G"
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
@@ -357,7 +359,7 @@ services:
           cpus: "0.20"
           memory: "256M"
   universalis-extra:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -392,7 +394,7 @@ services:
           cpus: "0.25"
           memory: "1G"
   universalis-history:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -428,7 +430,7 @@ services:
           cpus: "0.50"
           memory: "3G"
   universalis-upload:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.116"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.51.123"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -600,7 +602,7 @@ services:
       replicas: 0
       labels:
         - "swarm.cronjob.enable=true"
-        - "swarm.cronjob.schedule=0 0 * * * *"
+        - "swarm.cronjob.schedule=0 * * * *"
         - "swarm.cronjob.skip-running=false"
       restart_policy:
         condition: "none"
