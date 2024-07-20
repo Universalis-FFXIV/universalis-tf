@@ -252,7 +252,7 @@ resource "hcloud_server" "swarm_worker_5" {
 resource "hcloud_server" "swarm_worker_6" {
   name               = "swarm-worker-6"
   server_type        = "cx42"
-  image              = "40093247"
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
@@ -277,7 +277,7 @@ resource "hcloud_server" "swarm_worker_6" {
 resource "hcloud_server" "swarm_worker_7" {
   name               = "swarm-worker-7"
   server_type        = "cx42"
-  image              = "40093247"
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
@@ -505,7 +505,7 @@ resource "hcloud_load_balancer" "lb_swarm" {
   location           = "hel1"
   delete_protection  = true
   algorithm {
-    type = "least_connections"
+    type = "round_robin"
   }
 }
 
