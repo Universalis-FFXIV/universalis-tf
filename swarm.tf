@@ -352,7 +352,7 @@ resource "hcloud_server" "swarm_worker_9" {
 resource "hcloud_server" "swarm_worker_10" {
   name               = "swarm-worker-10"
   server_type        = "cx42"
-  image              = "40093247"
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
@@ -362,6 +362,31 @@ resource "hcloud_server" "swarm_worker_10" {
   network {
     network_id = hcloud_network.network.id
     ip         = "10.0.1.15"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+resource "hcloud_server" "swarm_worker_11" {
+  name               = "swarm-worker-11"
+  server_type        = "cx42"
+  image              = "40093247"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.16"
   }
 
   public_net {
@@ -408,6 +433,10 @@ output "swarm_worker_9_ip" {
 
 output "swarm_worker_10_ip" {
   value = hcloud_server.swarm_worker_10.ipv4_address
+}
+
+output "swarm_worker_11_ip" {
+  value = hcloud_server.swarm_worker_11.ipv4_address
 }
 
 resource "hcloud_server" "scylla_1" {
@@ -658,6 +687,7 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_worker_8.id,
     hcloud_server.swarm_worker_9.id,
     hcloud_server.swarm_worker_10.id,
+    hcloud_server.swarm_worker_11.id,
     hcloud_server.scylla_1.id,
     hcloud_server.scylla_2.id,
     hcloud_server.scylla_3.id
