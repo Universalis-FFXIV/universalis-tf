@@ -1,7 +1,6 @@
-version: '3.3'
+version: "3.3"
 
 services:
-
   traefik:
     image: traefik:v2.9.10
     ports:
@@ -13,10 +12,10 @@ services:
       mode: global
       resources:
         limits:
-          cpus: '3.00'
+          cpus: "3.00"
           memory: 6G
         reservations:
-          cpus: '1.50'
+          cpus: "1.50"
           memory: 6G
       restart_policy:
         delay: 60s
@@ -91,7 +90,7 @@ services:
       - universalis_cf_cert
       - universalis_cf_key
     configs:
-      - source: traefik_dynamic-v31
+      - source: traefik_dynamic-v32
         target: /etc/traefik_providers/file_provider.yml
 networks:
   traefik-public:
@@ -104,5 +103,5 @@ secrets:
   universalis_cf_key:
     external: true
 configs:
-  traefik_dynamic-v31:
+  traefik_dynamic-v32:
     external: true

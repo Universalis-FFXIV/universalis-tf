@@ -8,7 +8,14 @@ http:
     universalis-https:
       service: universalis_weighted
       entrypoints: [https]
-      middlewares: [rate-limit, max-inflightreq, global-max-inflightreq, compress-response, buffer-response]
+      middlewares:
+        [
+          rate-limit,
+          max-inflightreq,
+          global-max-inflightreq,
+          compress-response,
+          buffer-response,
+        ]
       tls: {}
       rule: Host(`universalis.app`) || Host(`staging.universalis.app`)
     universalis-stats-https:
@@ -54,16 +61,17 @@ http:
           path: /tmp
     max-inflightreq:
       inFlightReq:
-        amount: 3 # 8 / 3 = 2.66
+        # Note that this (and all other limits) are per-Traefik instance, and are not synchronized
+        amount: 8
         sourceCriterion:
           requestHeaderName: CF-Connecting-IP
     global-max-inflightreq:
       inFlightReq:
-        amount: 8000 # 24k / 3 = 8k
+        amount: 8000
     rate-limit:
       rateLimit:
-        average: 9 # 25 / 3 = 8.33
-        burst: 17 # 50 / 3 = 16.66
+        average: 25
+        burst: 50
         sourceCriterion:
           requestHeaderName: CF-Connecting-IP
     compress-response:
