@@ -322,6 +322,17 @@ services:
         reservations:
           cpus: "2.00"
           memory: "3G"
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.universalis-mogboard-http.rule=(Host(`universalis.app`) || Host(`staging.universalis.app`)) && PathPrefix(`/api/{path:(v\d/)?(extra|misc|history|\d+)}`) && HeadersRegexp(`User-Agent`, `(?)^mogboard/.*$$`)
+        - traefik.http.routers.universalis-mogboard-http.entrypoints=http
+        - traefik.http.routers.universalis-mogboard-http.middlewares=https-redirect
+        - traefik.http.routers.universalis-mogboard-https.rule=(Host(`universalis.app`) || Host(`staging.universalis.app`)) && PathPrefix(`/api/{path:(v\d/)?(extra|misc|history|\d+)}`) && HeadersRegexp(`User-Agent`, `(?)^mogboard/.*$$`)
+        - traefik.http.routers.universalis-mogboard-https.entrypoints=https
+        - traefik.http.routers.universalis-mogboard-https.tls=true
+        - traefik.http.services.universalis-mogboard.loadbalancer.server.port=4002
   universalis-websocket:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.53.0"
     environment:
