@@ -242,7 +242,7 @@ services:
       - "universalis"
       - "victoria"
     deploy:
-      replicas: 12
+      replicas: 10
       restart_policy:
         delay: 45s
       resources:
