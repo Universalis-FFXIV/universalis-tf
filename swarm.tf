@@ -402,7 +402,7 @@ resource "hcloud_server" "swarm_worker_11" {
 resource "hcloud_server" "swarm_worker_12" {
   name               = "swarm-worker-12"
   server_type        = "cx42"
-  image              = "40093247"
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
@@ -602,7 +602,7 @@ resource "hcloud_volume" "api_db_3" {
 resource "hcloud_volume" "metrics_db" {
   name              = "metrics-db"
   location          = "hel1"
-  size              = 60
+  size              = 100
   format            = "ext4"
   delete_protection = true
 }
