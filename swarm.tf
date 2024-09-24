@@ -199,31 +199,6 @@ resource "hcloud_server" "swarm_worker_2" {
   ]
 }
 
-resource "hcloud_server" "swarm_worker_3" {
-  name               = "swarm-worker-3"
-  server_type        = "cx42"
-  image              = "docker-ce"
-  location           = "hel1"
-  keep_disk          = true
-  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
-  delete_protection  = true
-  rebuild_protection = true
-
-  network {
-    network_id = hcloud_network.network.id
-    ip         = "10.0.1.6"
-  }
-
-  public_net {
-    ipv4_enabled = true
-    ipv6_enabled = false
-  }
-
-  depends_on = [
-    hcloud_network_subnet.subnet
-  ]
-}
-
 resource "hcloud_server" "swarm_worker_5" {
   name               = "swarm-worker-5"
   server_type        = "cx42"
@@ -430,10 +405,6 @@ output "swarm_worker_1_ip" {
 
 output "swarm_worker_2_ip" {
   value = hcloud_server.swarm_worker_2.ipv4_address
-}
-
-output "swarm_worker_3_ip" {
-  value = hcloud_server.swarm_worker_3.ipv4_address
 }
 
 output "swarm_worker_5_ip" {
@@ -709,7 +680,6 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_manager_3.id,
     hcloud_server.swarm_worker_1.id,
     hcloud_server.swarm_worker_2.id,
-    hcloud_server.swarm_worker_3.id,
     hcloud_server.swarm_worker_5.id,
     hcloud_server.swarm_worker_6.id,
     hcloud_server.swarm_worker_7.id,
