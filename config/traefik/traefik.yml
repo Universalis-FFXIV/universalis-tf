@@ -90,7 +90,7 @@ services:
       - universalis_cf_cert
       - universalis_cf_key
     configs:
-      - source: traefik_dynamic-v32
+      - source: traefik_dynamic-v35
         target: /etc/traefik_providers/file_provider.yml
 networks:
   traefik-public:
@@ -103,5 +103,5 @@ secrets:
   universalis_cf_key:
     external: true
 configs:
-  traefik_dynamic-v32:
+  traefik_dynamic-v35:
     external: true
