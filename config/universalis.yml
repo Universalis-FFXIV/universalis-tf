@@ -473,7 +473,7 @@ services:
           cpus: "0.50"
           memory: "512M"
   universalis-staging:
-    image: "ghcr.io/universalis-ffxiv/universalis-staging:v2.56.2"
+    image: "ghcr.io/universalis-ffxiv/universalis-staging:v2"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
