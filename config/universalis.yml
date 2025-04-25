@@ -152,7 +152,7 @@ services:
         constraints:
           - "node.labels.mogboard.db-data == true"
   mogboard-alerts:
-    image: "ghcr.io/universalis-ffxiv/universalis-alerts:v0.1.1"
+    image: "ghcr.io/universalis-ffxiv/universalis-alerts:v0.1.0"
     environment:
       UNIVERSALIS_ALERTS_DB: mysql://dalamud:dalamud@mariadb:3306/dalamud
       UNIVERSALIS_ALERTS_WS: ws://universalis-websocket:4002/api/ws
