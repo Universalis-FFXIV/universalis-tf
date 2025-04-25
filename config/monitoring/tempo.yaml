@@ -13,7 +13,9 @@ distributor:
     otlp:
       protocols:
         http:
+          endpoint: "0.0.0.0:4318"     # this is the default endpoint for the OpenTelemetry collector to send traces to tempo
         grpc:
+          endpoint: "0.0.0.0:4317"     # this is the default endpoint for the OpenTelemetry collector to send traces to tempo
     opencensus:
 
 ingester:
