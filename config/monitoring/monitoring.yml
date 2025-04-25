@@ -90,7 +90,7 @@ services:
         constraints:
           - "node.labels.monitoring.data == true"
   otel-collector:
-    image: "otel/opentelemetry-collector:0.123.0"
+    image: "otel/opentelemetry-collector:0.86.0"
     command: [ "--config=/etc/otel-collector.yaml" ]
     networks:
       - "net2"
