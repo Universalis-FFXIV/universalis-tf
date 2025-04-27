@@ -334,7 +334,7 @@ services:
         - traefik.http.routers.universalis-mogboard-https.tls=true
         - traefik.http.services.universalis-mogboard.loadbalancer.server.port=4002
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.59.9"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.59.10"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
