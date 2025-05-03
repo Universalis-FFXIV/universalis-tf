@@ -110,7 +110,7 @@ services:
       - source: otel_collector
         target: /etc/otel-collector.yaml
   grafana:
-    image: "grafana/grafana:10.1.4"
+    image: "grafana/grafana:11.6.1"
     environment:
       GF_SERVER_DOMAIN: "monitor.universalis.app"
       GF_DEFAULT_FORCE_MIGRATION: "true"
