@@ -112,6 +112,7 @@ services:
   grafana:
     image: "grafana/grafana:11.6.1"
     environment:
+      GF_SERVER_ROOT_URL: "https://monitor.universalis.app"
       GF_SERVER_DOMAIN: "monitor.universalis.app"
       GF_DEFAULT_FORCE_MIGRATION: "true"
     volumes:
