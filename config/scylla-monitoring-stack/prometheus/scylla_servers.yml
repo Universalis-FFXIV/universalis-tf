@@ -2,6 +2,8 @@
     - 10.0.1.7
     - 10.0.1.8
     - 10.0.1.9
+    - 10.0.1.18
+    - 10.0.1.19
   labels:
     cluster: rack1
     dc: datacenter1

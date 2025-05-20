@@ -488,6 +488,58 @@ resource "hcloud_server" "scylla_3" {
   ]
 }
 
+resource "hcloud_server" "scylla_4" {
+  name               = "scylla-4"
+  server_type        = "ccx23"
+  image              = "40093247"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+  backups            = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.18"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
+resource "hcloud_server" "scylla_5" {
+  name               = "scylla-5"
+  server_type        = "ccx23"
+  image              = "40093247"
+  location           = "hel1"
+  keep_disk          = true
+  ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
+  delete_protection  = true
+  rebuild_protection = true
+  backups            = true
+
+  network {
+    network_id = hcloud_network.network.id
+    ip         = "10.0.1.19"
+  }
+
+  public_net {
+    ipv4_enabled = true
+    ipv6_enabled = false
+  }
+
+  depends_on = [
+    hcloud_network_subnet.subnet
+  ]
+}
+
 output "scylla_1_ip" {
   value = hcloud_server.scylla_1.ipv4_address
 }
@@ -498,6 +550,14 @@ output "scylla_2_ip" {
 
 output "scylla_3_ip" {
   value = hcloud_server.scylla_3.ipv4_address
+}
+
+output "scylla_4_ip" {
+  value = hcloud_server.scylla_4.ipv4_address
+}
+
+output "scylla_5_ip" {
+  value = hcloud_server.scylla_5.ipv4_address
 }
 
 # Volumes for the website and API databases
@@ -541,6 +601,22 @@ resource "hcloud_volume" "api_db_3" {
   delete_protection = true
 }
 
+resource "hcloud_volume" "api_db_4" {
+  name              = "api-db-4"
+  location          = "hel1"
+  size              = 200
+  format            = "xfs"
+  delete_protection = true
+}
+
+resource "hcloud_volume" "api_db_5" {
+  name              = "api-db-5"
+  location          = "hel1"
+  size              = 200
+  format            = "xfs"
+  delete_protection = true
+}
+
 resource "hcloud_volume" "metrics_db" {
   name              = "metrics-db"
   location          = "hel1"
@@ -570,6 +646,18 @@ resource "hcloud_volume_attachment" "api_db_2_ref" {
 resource "hcloud_volume_attachment" "api_db_3_ref" {
   volume_id = hcloud_volume.api_db_3.id
   server_id = hcloud_server.scylla_3.id
+  automount = true
+}
+
+resource "hcloud_volume_attachment" "api_db_4_ref" {
+  volume_id = hcloud_volume.api_db_4.id
+  server_id = hcloud_server.scylla_4.id
+  automount = true
+}
+
+resource "hcloud_volume_attachment" "api_db_5_ref" {
+  volume_id = hcloud_volume.api_db_5.id
+  server_id = hcloud_server.scylla_5.id
   automount = true
 }
 
@@ -654,6 +742,8 @@ resource "hcloud_firewall_attachment" "swarm_firewall_ref" {
     hcloud_server.swarm_worker_12.id,
     hcloud_server.scylla_1.id,
     hcloud_server.scylla_2.id,
-    hcloud_server.scylla_3.id
+    hcloud_server.scylla_3.id,
+    hcloud_server.scylla_4.id,
+    hcloud_server.scylla_5.id
   ]
 }
