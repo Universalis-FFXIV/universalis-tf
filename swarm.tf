@@ -491,7 +491,7 @@ resource "hcloud_server" "scylla_3" {
 resource "hcloud_server" "scylla_4" {
   name               = "scylla-4"
   server_type        = "ccx23"
-  image              = "40093247"
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
@@ -517,7 +517,7 @@ resource "hcloud_server" "scylla_4" {
 resource "hcloud_server" "scylla_5" {
   name               = "scylla-5"
   server_type        = "ccx23"
-  image              = "40093247"
+  image              = "docker-ce"
   location           = "hel1"
   keep_disk          = true
   ssh_keys           = [hcloud_ssh_key.swarm_ssh.id]
