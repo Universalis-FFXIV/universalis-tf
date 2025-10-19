@@ -111,11 +111,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "1"
+          memory: "2G"
         reservations:
           cpus: "0.25"
-          memory: "512M"
+          memory: "1G"
       placement:
         constraints:
           - "node.labels.mogboard.db-data == true"
@@ -532,6 +532,9 @@ services:
         reservations:
           cpus: "1.00"
           memory: "4G"
+      placement:
+        constraints:
+          - "node.labels.mogboard.db-data != true"
   cache2:
     image: "redis:7.0.8"
     command:
@@ -555,6 +558,9 @@ services:
         reservations:
           cpus: "1.00"
           memory: "4G"
+      placement:
+        constraints:
+          - "node.labels.mogboard.db-data != true"
   cache3:
     image: "redis:7.0.8"
     command:
@@ -578,6 +584,9 @@ services:
         reservations:
           cpus: "1.00"
           memory: "4G"
+      placement:
+        constraints:
+          - "node.labels.mogboard.db-data != true"
   cache-staging1:
     image: "redis:7.0.8"
     command: 'redis-server --save "" --loglevel warning'
