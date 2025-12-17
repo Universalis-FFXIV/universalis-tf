@@ -318,10 +318,10 @@ services:
       resources:
         limits:
           cpus: "3.00"
-          memory: "3G"
+          memory: "2G"
         reservations:
-          cpus: "2.00"
-          memory: "3G"
+          cpus: "1.00"
+          memory: "2G"
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
