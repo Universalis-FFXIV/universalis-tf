@@ -217,7 +217,7 @@ services:
           cpus: "0.07"
           memory: "256M"
   universalis:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -254,7 +254,7 @@ services:
           cpus: "4.00"
           memory: "6G"
   universalis-canary:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -290,7 +290,7 @@ services:
           cpus: "4.00"
           memory: "6G"
   universalis-reserve:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -335,7 +335,7 @@ services:
         - traefik.http.routers.universalis-mogboard-https.tls=true
         - traefik.http.services.universalis-mogboard.loadbalancer.server.port=4002
   universalis-websocket:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       RECEIVE_STREAMING_EVENTS: "true"
@@ -370,7 +370,7 @@ services:
           cpus: "0.20"
           memory: "256M"
   universalis-extra:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -405,7 +405,7 @@ services:
           cpus: "1.00"
           memory: "1G"
   universalis-history:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
@@ -441,7 +441,7 @@ services:
           cpus: "0.50"
           memory: "3G"
   universalis-upload:
-    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.10"
+    image: "ghcr.io/universalis-ffxiv/universalis:v2.65.11"
     environment:
       ASPNETCORE_URLS: "http://+:4002"
       UNIVERSALIS_MOGBOARD_CONNECTION: "User ID=dalamud;Password=dalamud;Database=dalamud;Server=mariadb;Port=3306"
