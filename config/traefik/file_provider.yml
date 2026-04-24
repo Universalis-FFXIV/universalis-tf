@@ -82,7 +82,7 @@ http:
 serversTransport:
   forwardingTimeouts:
     dialTimeout: 10s
-    responseHeaderTimeout: 5s
+    responseHeaderTimeout: 15s
     idleConnTimeout: 30s
 tls:
   certificates:
