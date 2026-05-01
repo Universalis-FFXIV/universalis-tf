@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   universalis-docs:
-    image: "ghcr.io/universalis-ffxiv/universalis-docs:latest"
+    image: "ghcr.io/universalis-ffxiv/universalis-docs:v1.2.3"
     networks:
       - "net"
       - "traefik-public"
