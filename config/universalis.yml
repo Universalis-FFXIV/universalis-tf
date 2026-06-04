@@ -252,7 +252,10 @@ services:
           memory: "6G"
         reservations:
           cpus: "4.00"
-          memory: "6G"
+          memory: "5G"
+      placement:
+        constraints:
+          - "node.labels.grafana.grafana-data != true"
   universalis-canary:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.67.0"
     environment:
@@ -288,7 +291,7 @@ services:
           memory: "6G"
         reservations:
           cpus: "4.00"
-          memory: "6G"
+          memory: "5G"
   universalis-reserve:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.67.0"
     environment:
@@ -436,10 +439,10 @@ services:
       resources:
         limits:
           cpus: "2.00"
-          memory: "3G"
+          memory: "2G"
         reservations:
-          cpus: "0.50"
-          memory: "3G"
+          cpus: "0.25"
+          memory: "2G"
   universalis-upload:
     image: "ghcr.io/universalis-ffxiv/universalis:v2.67.0"
     environment:
