@@ -59,7 +59,7 @@ services:
   # Tempo runs as user 10001, and docker compose creates the volume as root.
   # As such, we need to chown the volume in order for Tempo to start correctly.
   tempo-init:
-    image: "grafana/tempo:latest"
+    image: "grafana/tempo:2.10.7"
     user: root
     entrypoint:
       - "chown"
@@ -68,8 +68,8 @@ services:
     volumes:
       - "/monitoring/tempo/data/:/tmp/tempo:rw"
   tempo:
-    image: "grafana/tempo:latest"
-    command: [ "-config.file=/etc/tempo.yaml" ]
+    image: "grafana/tempo:2.10.7"
+    command: ["-config.file=/etc/tempo.yaml"]
     volumes:
       - "/monitoring/tempo/tempo.yaml:/etc/tempo.yaml:ro"
       - "/monitoring/tempo/data/:/tmp/tempo:rw"
@@ -91,7 +91,7 @@ services:
           - "node.labels.monitoring.data == true"
   otel-collector:
     image: "otel/opentelemetry-collector:0.86.0"
-    command: [ "--config=/etc/otel-collector.yaml" ]
+    command: ["--config=/etc/otel-collector.yaml"]
     networks:
       - "net2"
       - "victoria"
@@ -107,7 +107,7 @@ services:
         constraints:
           - "node.labels.monitoring.data == true"
     configs:
-      - source: otel_collector
+      - source: otel_collector_v3
         target: /etc/otel-collector.yaml
   grafana:
     image: "grafana/grafana:11.6.1"
@@ -155,5 +155,5 @@ networks:
   traefik-public:
     external: true
 configs:
-  otel_collector:
+  otel_collector_v3:
     external: true
