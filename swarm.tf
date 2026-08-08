@@ -580,7 +580,7 @@ resource "hcloud_volume" "api_db" {
 resource "hcloud_volume" "api_db_1" {
   name              = "api-db-1"
   location          = "hel1"
-  size              = 200
+  size              = 400
   format            = "xfs"
   delete_protection = true
 }
@@ -588,7 +588,7 @@ resource "hcloud_volume" "api_db_1" {
 resource "hcloud_volume" "api_db_2" {
   name              = "api-db-2"
   location          = "hel1"
-  size              = 200
+  size              = 400
   format            = "xfs"
   delete_protection = true
 }
@@ -596,7 +596,7 @@ resource "hcloud_volume" "api_db_2" {
 resource "hcloud_volume" "api_db_3" {
   name              = "api-db-3"
   location          = "hel1"
-  size              = 200
+  size              = 400
   format            = "xfs"
   delete_protection = true
 }
