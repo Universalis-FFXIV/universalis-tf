@@ -27,10 +27,10 @@ services:
       - scylla-monitoring-stack
       - traefik-public
     volumes:
-    - /scylla-monitoring-stack/grafana/build:/var/lib/grafana/dashboards
-    - /scylla-monitoring-stack/grafana/plugins:/var/lib/grafana/plugins
-    - /scylla-monitoring-stack/grafana/provisioning:/var/lib/grafana/provisioning
-    - /scylla-monitoring-stack/grafana/data:/var/lib/grafana
+      - /scylla-monitoring-stack/grafana/build:/var/lib/grafana/dashboards
+      - /scylla-monitoring-stack/grafana/plugins:/var/lib/grafana/plugins
+      - /scylla-monitoring-stack/grafana/provisioning:/var/lib/grafana/provisioning
+      - /scylla-monitoring-stack/grafana/data:/var/lib/grafana
     user: "0:0"
     deploy:
       resources:
@@ -57,12 +57,12 @@ services:
   loki:
     image: grafana/loki:2.7.1
     command:
-    - --config.file=/mnt/config/loki-config.yaml
+      - --config.file=/mnt/config/loki-config.yaml
     networks:
       - scylla-monitoring-stack
     volumes:
-    - /scylla-monitoring-stack/loki/rules:/etc/loki/rules
-    - /scylla-monitoring-stack/loki/conf:/mnt/config
+      - /scylla-monitoring-stack/loki/rules:/etc/loki/rules
+      - /scylla-monitoring-stack/loki/conf:/mnt/config
     deploy:
       resources:
         limits:
@@ -77,15 +77,16 @@ services:
   aprom:
     image: prom/prometheus:v2.38.0
     command:
-    - --config.file=/etc/prometheus/prometheus.yml
+      - --config.file=/etc/prometheus/prometheus.yml
     networks:
       - scylla-monitoring-stack
     volumes:
-    - /scylla-monitoring-stack/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    - /scylla-monitoring-stack/prometheus/prom_rules/prometheus.rules.yml:/etc/prometheus/prom_rules/prometheus.rules.yml
-    - /scylla-monitoring-stack/prometheus/scylla_servers.yml:/etc/scylla.d/prometheus/scylla_servers.yml
-    - /scylla-monitoring-stack/prometheus/scylla_servers.yml:/etc/scylla.d/prometheus/node_exporter_servers.yml
-    - /scylla-monitoring-stack/prometheus/data:/prometheus/data
+      - /scylla-monitoring-stack/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /scylla-monitoring-stack/prometheus/prom_rules/prometheus.rules.yml:/etc/prometheus/prom_rules/prometheus.rules.yml
+      - /scylla-monitoring-stack/prometheus/scylla_servers.yml:/etc/scylla.d/prometheus/scylla_servers.yml
+      - /scylla-monitoring-stack/prometheus/scylla_servers.yml:/etc/scylla.d/prometheus/node_exporter_servers.yml
+      - /scylla-monitoring-stack/prometheus/scylla_manager_servers.yml:/etc/scylla.d/prometheus/scylla_manager_servers.yml
+      - /scylla-monitoring-stack/prometheus/data:/prometheus/data
     user: "0:0"
     deploy:
       resources:
@@ -101,7 +102,7 @@ services:
   promtail:
     image: grafana/promtail:2.7.1
     command:
-    - --config.file=/etc/promtail/config.yml
+      - --config.file=/etc/promtail/config.yml
     networks:
       - scylla-monitoring-stack
     deploy:
@@ -116,6 +117,52 @@ services:
       # /scylla-monitoring-stack/loki/promtail/promtail_config.compose.yml
       - source: promtail
         target: /etc/promtail/config.yml
+
+  # Backing store for the manager server — Manager 3.x has no local DB;
+  # the server keeps its task ledger in its own Scylla instance. Service
+  # name is requested verbatim by the image config and must not be changed.
+  scylla-manager-db:
+    image: scylladb/scylla:5.4.8
+    networks:
+      - scylla-monitoring-stack
+    command:
+      - --smp=1
+      - --memory=1G
+      - --reserve-memory=128M
+      - --overprovisioned=1
+      - --developer-mode=1
+    volumes:
+      - /scylla-manager-db/data:/var/lib/scylla
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1536M
+        reservations:
+          cpus: "0.50"
+          memory: 1G
+      placement:
+        constraints:
+          - "node.labels.scylla-manager-db.data == true"
+
+  amanager:
+    image: scylladb/scylla-manager:3.4.2
+    networks:
+      - scylla-monitoring-stack
+    volumes:
+      - /scylla-monitoring-stack/manager/data:/var/lib/scylla-manager
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.10"
+          memory: 128M
+      placement:
+        constraints:
+          - "node.labels.scylla-monitoring-stack.data == true"
+
 networks:
   scylla-monitoring-stack:
     external: true

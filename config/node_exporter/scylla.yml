@@ -12,3 +12,17 @@ services:
     restart: "unless-stopped"
     volumes:
       - "/:/host:ro,rslave"
+
+  scylla-manager-agent:
+    image: "scylladb/scylla-manager-agent:3.4.2"
+    container_name: "scylla_manager_agent"
+    network_mode: "host"
+    restart: "unless-stopped"
+    volumes:
+      - "/dev:/dev"
+      - "/tmp:/tmp:rw"
+      - "/var/lib/scylla:/var/lib/scylla:ro"
+      # Nodes 4/5 (10.0.1.18/.19) keep Scylla data on /mnt/api-db/scylla/data
+      # instead — uncomment the line below there:
+      # - "/mnt/api-db:/mnt/api-db:ro"
+      - "/node_exporter/scylla-manager-agent.yaml:/etc/scylla-manager-agent/scylla-manager-agent.yaml:ro"

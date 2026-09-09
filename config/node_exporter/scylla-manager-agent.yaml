@@ -1,0 +1,12 @@
+auth_token: "REPLACE_WITH_SHARED_TOKEN"
+
+# Agent metrics on :56090 — must match the manager_agent scrape job in
+# config/scylla-monitoring-stack/prometheus/prometheus.yml
+prometheus: ":56090"
+
+# Required for on-host Scylla: the agent does not read /etc/scylla itself,
+# and its compile-time default (0.0.0.0) dials loopback, which clustered
+# nodes refuse. Set to the current host's private IP on each node.
+scylla:
+  api_address: "10.0.1.7"
+  api_port: "10000"
